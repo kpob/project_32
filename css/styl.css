@@ -1,0 +1,23 @@
+html,body {
+	background-color: black;
+	height: 70%; 
+	width: 900px;
+}
+
+#panel{
+	margin-top: 30px;
+	height: 485px; 
+}
+
+#container {
+    float: left;
+    width: 500px;
+    border: solid 1px;
+}
+
+
+#logField {
+	color: #0F0;
+	background-color: black;
+	font-weight: bold;
+}

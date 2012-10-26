@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="-1" />	
+  <link rel="stylesheet" type="text/css" href="css/styl.css">
+
+  <title>CHESS HEROES</title>
+  <script type="text/javascript" src="js/common.js"></script>
+  <script type="text/javascript" src="libs/Kinetic.js"></script>
+  <script type="text/javascript" src="libs/jquery.js"></script>
+
+  <script type="text/javascript" src="checkers/Controler.js"></script>
+  <script type="text/javascript" src="checkers/Field.js"></script>
+  <script type="text/javascript" src="checkers/Game.js"></script>
+  <script type="text/javascript" src="checkers/Images.js"></script>
+  <script type="text/javascript" src="checkers/Model.js"></script>
+  <script type="text/javascript" src="checkers/Moves.js"></script>
+  <script type="text/javascript" src="checkers/Player.js"></script>
+  <script type="text/javascript" src="checkers/Tools.js"></script>
+  <script type="text/javascript" src="checkers/View.js"></script>
+
+  <script type="text/javascript" src="checkers/AI/RandomAI.js"></script>
+
+  <script type="text/javascript">
+    function start() {
+      naclModule.postMessage('newGame');
+    }
+
+    function clearLog() {
+      var input = document.getElementById('logField');
+	  input.innerHTML = "";
+    }
+
+	function printBoard(){
+		naclModule.postMessage('printBoard');
+	}
+  </script>
+</head>
+<body onload="pageDidLoad('hello_world_interactive', 'newlib'); gStart();">
+
+  <div id="listener">
+    <script type="text/javascript">
+      var listener = document.getElementById('listener')
+      listener.addEventListener('load', moduleDidLoad, true);
+      listener.addEventListener('message', handleMessage, true);
+    </script>
+  </div>
+
+  <div id="container"></div>
+  <div id="panel">
+    <textarea id="logField" name="logField" rows="25" cols="40"></textarea>
+    <div/>
+    <table>
+    <button id="fortyTwoButton" onclick="start()">New Game</button>
+ 	<button id="printBoard" onclick="printBoard()">Print Board</button>
+    <button id="reverseTextButton" onclick="clearLog()">Clear Log</button>
+    <table/>
+  </div>
+</body>
+</html>
