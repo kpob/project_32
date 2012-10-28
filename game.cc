@@ -19,7 +19,7 @@ Game::Game() : currentState(0), pWhite(0), pBlack(0), isSet(false){
 }
 
 void Game::newGame(){
-	currentState = new GameState(0x00000050, 0x02000000, 0, white);
+	currentState = new GameState(0x00000fff, 0xfff00000, 0, black);
 }
 
 void Game::setPlayers(std::string player1, std::string player2){
@@ -38,7 +38,7 @@ void Game::setPlayers(std::string player1, std::string player2){
 	}
 
 	if(pBlackArgs.at(1) == "js"){
-		pBlack = new Player(0, white, "js");
+		pBlack = new Player(0, black, "js");
 	}else{
 		if(pBlackArgs.at(2) == "minmax")
 			pBlack = new Player(new MinMax(new MoveGen()), black, "nacl");

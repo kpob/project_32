@@ -19,6 +19,10 @@ namespace checkers {
 
 const char* const printBoardMethodId = "printBoard";
 const char* const newGameMethodId = "newGame";
+const char* const setPlayersString = "setPlayers";
+
+const char* const methodSeparator = ":";
+const char* const argsSeparator = ",";
 
 
 
@@ -47,25 +51,27 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
   
 	if (message == printBoardMethodId){
 		PostMessage(pp::Var(helper::printBoard(Game::getInstance().state())));	
-	}else if (message.find("setPlayers") == 0) {
-		size_t sep_pos = message.find_first_of(",");
+	}else if (message.find(setPlayersString) == 0) {
+		size_t sep_pos = message.find_first_of(methodSeparator);
 		std::string string_arg = message.substr(sep_pos + 1);
 		size_t white_pos = string_arg.find_first_of("white");
 		std::string player1 = string_arg.substr(0, white_pos -1);
 		std::string player2 = string_arg.substr(white_pos, std::string::npos);
 
 		Game::getInstance().setPlayers(player1, player2);
-		PostMessage(pp::Var("gracz 1"));
-		PostMessage(pp::Var("\n"));
-		PostMessage(pp::Var(Game::getInstance().p1()->lang()));
-		PostMessage(pp::Var("\n"));		
-		PostMessage(pp::Var("gracz 2"));
-		PostMessage(pp::Var("\n"));
-		PostMessage(pp::Var(Game::getInstance().p2()->lang()));
+//		PostMessage(pp::Var("gracz 1"));
+//		PostMessage(pp::Var("\n"));
+//		PostMessage(pp::Var(Game::getInstance().p1()->lang()));
+//		PostMessage(pp::Var("\n"));		
+//		PostMessage(pp::Var("gracz 2"));
+//		PostMessage(pp::Var("\n"));
+//		PostMessage(pp::Var(Game::getInstance().p2()->lang()));
 		PostMessage(var_message);
-//		Game::getInstance().newGame();
-	}else{
-		PostMessage(pp::Var("dupa"));
+
+	}else if(message == newGameMethodId){
+		Game::getInstance().newGame();
+		PostMessage(pp::Var(var_message));
+		PostMessage(pp::Var("currentPlayer:black"));
 	}
 }
 
