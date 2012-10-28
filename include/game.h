@@ -42,11 +42,12 @@ public:
 	}
 
 	void newGame();
-//	void newGame(std::string player1, std::string player2);
 
 	void setPlayers(std::string player1, std::string player2);
 
 	bool isStarted();
+	bool arePlayersSet();
+
 	void updateState(GameState *newState);
 
 };

@@ -47,12 +47,19 @@ private:
 	//void nextJumps(GameState *gs, int from, std::vector<GameState*> &v);
 
 	//int reward(GameState *s, int player);
-
-public:
 	MoveGen();
+	MoveGen(const MoveGen &);
+
+	MoveGen& operator=(const MoveGen&);
+	
+public:
 	virtual ~MoveGen() {};
 	std::vector<GameState *> genere(int depth);
 	//std::vector<GameState*> nextStates(GameState *gs);
+	static MoveGen& getInstance() {
+		static MoveGen instance;
+		return (instance);
+	}
 
 	int MinMax(GameState *state, int);
 

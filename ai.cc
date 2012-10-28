@@ -9,7 +9,7 @@
 #include "include/game_state.h"
 #include <vector>
 
-AI::AI(MoveGen *gen) : generator(gen){
+AI::AI(){
 	jumpDirections[0] = UP_LEFT;
 	jumpDirections[1] = UP_RIGHT;
 	jumpDirections[2] = DOWN_LEFT;
@@ -28,6 +28,7 @@ AI::AI(MoveGen *gen) : generator(gen){
  */
 
 std::vector<GameState*> AI::nextStates(GameState *gs) {
+	MoveGen &generator = MoveGen::getInstance();
 	std::vector<GameState*> v;
 	int player = gs->player();
 	for (unsigned i = 0; i < 32; i++) {
@@ -39,7 +40,7 @@ std::vector<GameState*> AI::nextStates(GameState *gs) {
 				continue;
 		}
 
-		if (!generator->getJumpers(gs))
+		if (!generator.getJumpers(gs))
 			nextMoves(gs, i, v);
 		else
 			nextJumps(gs,i, v);
@@ -52,9 +53,10 @@ std::vector<GameState*> AI::nextStates(GameState *gs) {
  */
 
 void AI::nextMoves(GameState *gs, int from, std::vector<GameState*> &v) {
+	MoveGen &generator = MoveGen::getInstance();
 	GameState *next;
 	for(int i=0; i<6; i++){
-		next = generator->move(gs, from, from + moveDirections[i], false);
+		next = generator.move(gs, from, from + moveDirections[i], false);
 		if (next){
 			next->setPlayer(gs->player());
 			next->tooglePlayer();
@@ -68,10 +70,11 @@ void AI::nextMoves(GameState *gs, int from, std::vector<GameState*> &v) {
  */
 
 void AI::nextJumps(GameState *gs, int from, std::vector<GameState*> &v) {
+	MoveGen &generator = MoveGen::getInstance();
 	GameState *next;
 	int jumps = 0;
 	for(int i=0; i<4; i++){
-		next = generator->jump(gs, from, from+jumpDirections[i], false);
+		next = generator.jump(gs, from, from+jumpDirections[i], false);
 		if(next){
 			jumps++;
 			if(next->queens() == gs->queens()) //todo: POWINNY BYC DAMKI DANEGO KOLORU
@@ -111,8 +114,4 @@ int AI::reward(GameState *s, int player) {
 	}
 	return (result);
 }
-
-
-
-
 

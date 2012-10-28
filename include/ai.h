@@ -21,11 +21,10 @@ private:
 	void nextJumps(GameState *gs, int from, std::vector<GameState*> &v);
 
 protected:
-	MoveGen *generator;
 	int reward(GameState *s, int player);
 
 public:
-	AI(MoveGen *generator);
+	AI();
 	virtual ~AI(){}
 
 	std::vector<GameState *> nextStates(GameState *gs);

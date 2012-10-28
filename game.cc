@@ -30,29 +30,35 @@ void Game::setPlayers(std::string player1, std::string player2){
 		pWhite = new Player(0, white, "js");
 	}else{
 		if(pWhiteArgs.at(2) == "minmax")
-			pWhite = new Player(new MinMax(new MoveGen()), white, "nacl");
+			pWhite = new Player(new MinMax(), white, "nacl");
 		else if(pWhiteArgs.at(2) == "ab")
-			pWhite = new Player(new MinMax(new MoveGen()), white, "nacl");
+			pWhite = new Player(new MinMax(), white, "nacl");
 		else if(pWhiteArgs.at(2) == "montecarlo")
-			pWhite = new Player(new MinMax(new MoveGen()), white, "nacl");
+			pWhite = new Player(new MinMax(), white, "nacl");
 	}
 
 	if(pBlackArgs.at(1) == "js"){
 		pBlack = new Player(0, black, "js");
 	}else{
 		if(pBlackArgs.at(2) == "minmax")
-			pBlack = new Player(new MinMax(new MoveGen()), black, "nacl");
+			pBlack = new Player(new MinMax(), black, "nacl");
 		else if(pBlackArgs.at(2) == "ab")
-			pBlack = new Player(new MinMax(new MoveGen()), black, "nacl");
+			pBlack = new Player(new MinMax(), black, "nacl");
 		else if(pBlackArgs.at(2) == "montecarlo")
-			pBlack = new Player(new MinMax(new MoveGen()), black, "nacl");
+			pBlack = new Player(new MinMax(), black, "nacl");
 	}
 
-
+	isSet = true;
 }
 
 bool Game::isStarted(){
 	if(currentState == 0)
+		return (false);
+	return (true);
+}
+
+bool Game::arePlayersSet(){
+	if(isSet == false)
 		return (false);
 	return (true);
 }

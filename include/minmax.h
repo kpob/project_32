@@ -14,7 +14,7 @@
 class MinMax : public AI{
 
 public:
-	MinMax(MoveGen *gen);
+	MinMax();
 	//~MinMax();
 
 	int compute(GameState *state, int depth);

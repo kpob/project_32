@@ -43,9 +43,8 @@ CheckersInstance::~CheckersInstance(){
 */
 
 void CheckersInstance::HandleMessage(const pp::Var& var_message) {
-	if (!var_message.is_string()) {
+	if (!var_message.is_string())
 		return;
-	}
 	
 	std::string message = var_message.AsString();
   
@@ -59,20 +58,28 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
 		std::string player2 = string_arg.substr(white_pos, std::string::npos);
 
 		Game::getInstance().setPlayers(player1, player2);
-//		PostMessage(pp::Var("gracz 1"));
-//		PostMessage(pp::Var("\n"));
-//		PostMessage(pp::Var(Game::getInstance().p1()->lang()));
-//		PostMessage(pp::Var("\n"));		
-//		PostMessage(pp::Var("gracz 2"));
-//		PostMessage(pp::Var("\n"));
-//		PostMessage(pp::Var(Game::getInstance().p2()->lang()));
 		PostMessage(var_message);
 
 	}else if(message == newGameMethodId){
-		Game::getInstance().newGame();
-		PostMessage(pp::Var(var_message));
+		if(Game::getInstance().arePlayersSet()){
+			Game::getInstance().newGame();
+			PostMessage(pp::Var(var_message));
+			PostMessage(pp::Var("currentPlayer:black"));
+		}else{
+			PostMessage(pp::Var("error:unsettedPlayers"));
+		}
+	}else if(message.find("move") == 0){
 
-		PostMessage(pp::Var("currentPlayer:black"));
+		size_t sep_pos = message.find_first_of(methodSeparator);
+		std::string string_arg = message.substr(sep_pos + 1);
+		size_t white_pos = string_arg.find_first_of(argsSeparator);
+		int from = pp::Var(string_arg.substr(0, white_pos)).AsInt();
+		int to = pp::Var(string_arg.substr(white_pos+1, std::string::npos)).AsInt();
+
+		MoveGen::getInstance().move(Game::getInstance().state(), from, to, true);
+
+		PostMessage(pp::Var("move:8,12,white"));
+		MoveGen::getInstance().move(Game::getInstance().state(), 8, 12, true);
 	}
 }
 

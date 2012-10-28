@@ -8,8 +8,7 @@
 #include "include/minmax.h"
 #include "include/game.h"
 
-MinMax::MinMax(MoveGen *gen) :
-		AI(gen) {
+MinMax::MinMax() : AI() {
 
 }
 
