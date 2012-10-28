@@ -43,16 +43,16 @@ private:
 	bool isOccupied(GameState *state, int field);
 	bool isEmpty(GameState *state, int32_t position);
 
-	void nextMoves(GameState *gs, int from, std::vector<GameState*> &v);
-	void nextJumps(GameState *gs, int from, std::vector<GameState*> &v);
+	//void nextMoves(GameState *gs, int from, std::vector<GameState*> &v);
+	//void nextJumps(GameState *gs, int from, std::vector<GameState*> &v);
 
-	int reward(GameState *s, int player);
+	//int reward(GameState *s, int player);
 
 public:
 	MoveGen();
 	virtual ~MoveGen() {};
 	std::vector<GameState *> genere(int depth);
-	std::vector<GameState*> nextStates(GameState *gs);
+	//std::vector<GameState*> nextStates(GameState *gs);
 
 	int MinMax(GameState *state, int);
 
