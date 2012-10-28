@@ -6,144 +6,71 @@
 #include "include/game_state.h"
 
 MoveGen::MoveGen(){
-	jumpDirections[0] = UP_LEFT;
-	jumpDirections[1] = UP_RIGHT;
-	jumpDirections[2] = DOWN_LEFT;
-	jumpDirections[3] = DOWN_RIGHT;
-
-	moveDirections[0] = 3;
-    moveDirections[1] = -3;
-	moveDirections[2] = 4;
-	moveDirections[3] = -4;
-	moveDirections[4] = 5;
-	moveDirections[5] = -5;
 }
 
-/*
- * STATES GENERATOR
- */
 
-std::vector<GameState*> MoveGen::nextStates(GameState *gs) {
-	std::vector<GameState*> v;
-	int player = gs->player();
-	for (unsigned i = 0; i < 32; i++) {
-		if (player == white) {
-			if ((gs->whites() & (1 << i)) == 0)
-				continue;
-		} else if (player == black) {
-			if ((gs->blacks() & (1 << i)) == 0)
-				continue;
-		}
+///*
+// * AI ALGORITIHMS
+// */
+//
+//int MoveGen::MinMax(GameState *state, int depth){
+//	//GameState * gs = Game::getInstance().state();
+//	//Game::getInstance().state()->player();
+//	std::vector<GameState *> next = nextStates(state);
+//	std::cout << "state " << state << " depth " << depth << " ruch " <<state->player() << std::endl;
+//	std::cout << "size " << next.size() << std::endl;
+//	for(unsigned i=0; i<next.size(); i++){
+//		std::cout << next.at(i) << " next.at(" << i << ") blacks " << next.at(i)->blacks()
+//				<< " white " << next.at(i)->whites() << std::endl;
+//	}
+//	if (next.size() == 0 || depth == 0)
+//		return (reward(state, Game::getInstance().state()->player()));
+//	//std::cout << "next.at(0) " << next.at(0)->blacks() << " " << next.at(0)->whites() << std::endl;
+//	int result = MinMax(next.at(0), depth-1);
+//	if(state->player() == Game::getInstance().state()->player()){
+//		std::cout << "me" << std::endl;
+//		for(unsigned i=1; i<next.size(); i++){
+//			int val = MinMax(next.at(i), depth-1);
+//			if(val > result)
+//				result = val;
+//		}
+//	}else{
+//		std::cout << "opp" << std::endl;
+//		for(unsigned i=1; i<next.size(); i++){
+//			int val = MinMax(next.at(i), depth-1);
+//			if(val < result)
+//				result = val;
+//		}
+//	}
+//	return (result);
+//}
 
-		if (!getJumpers(gs))
-			nextMoves(gs, i, v);
-		else
-			nextJumps(gs,i, v);
-	}
-	return (v);
-}
-
-/*
- * MOVES GENERATOR
- */
-
-void MoveGen::nextMoves(GameState *gs, int from, std::vector<GameState*> &v) {
-	GameState *next;
-	for(int i=0; i<6; i++){
-		next = move(gs, from, from + moveDirections[i], false);
-		if (next){
-			next->setPlayer(gs->player());
-			next->tooglePlayer();
-			v.push_back(next);
-		}
-	}
-}
-
-/*
- * JUMPS GENERATOR
- */
-
-void MoveGen::nextJumps(GameState *gs, int from, std::vector<GameState*> &v) {
-	GameState *next;
-	int jumps = 0;
-	for(int i=0; i<4; i++){
-		next = jump(gs, from, from+jumpDirections[i], false);
-		if(next){
-			jumps++;
-			if(next->queens() == gs->queens()) //todo: POWINNY BYC DAMKI DANEGO KOLORU
-				nextJumps(next,from+jumpDirections[i], v);
-			else{ //jesli stal sie damka - koniec ruchu
-				next->tooglePlayer();
-				v.push_back(next);
-			}
-		}
-	}
-	if(jumps==0)
-		v.push_back(gs);
-}
-
-/*
- * AI ALGORITIHMS
- */
-
-int MoveGen::MinMax(GameState *state, int depth){
-	//GameState * gs = Game::getInstance().state();
-	//Game::getInstance().state()->player();
-	std::vector<GameState *> next = nextStates(state);
-	std::cout << "state " << state << " depth " << depth << " ruch " <<state->player() << std::endl;
-	std::cout << "size " << next.size() << std::endl;
-	for(unsigned i=0; i<next.size(); i++){
-		std::cout << next.at(i) << " next.at(" << i << ") blacks " << next.at(i)->blacks()
-				<< " white " << next.at(i)->whites() << std::endl;
-	}
-	if (next.size() == 0 || depth == 0)
-		return (reward(state, Game::getInstance().state()->player()));
-	//std::cout << "next.at(0) " << next.at(0)->blacks() << " " << next.at(0)->whites() << std::endl;
-	int result = MinMax(next.at(0), depth-1);
-	if(state->player() == Game::getInstance().state()->player()){
-		std::cout << "me" << std::endl;
-		for(unsigned i=1; i<next.size(); i++){
-			int val = MinMax(next.at(i), depth-1);
-			if(val > result)
-				result = val;
-		}
-	}else{
-		std::cout << "opp" << std::endl;
-		for(unsigned i=1; i<next.size(); i++){
-			int val = MinMax(next.at(i), depth-1);
-			if(val < result)
-				result = val;
-		}
-	}
-	return (result);
-}
-
-int MoveGen::reward(GameState *s, int player) {
-	const int queenVal = 5;
-	const int pawnVal = 2;
-	const BITBOARD blackQuuens = s->blacks() & s->queens();
-	const BITBOARD whiteQuuens = s->whites() & s->queens();
-	const BITBOARD blackPawns = s->blacks() & ~s->queens();
-	const BITBOARD whitePawns = s->whites() & ~s->queens();
-	int result = 0;
-
-	BITBOARD pos;
-	for (int i = 0; i < 32; i++) {
-		pos = (1 << pos);
-		if (pos & blackQuuens)
-			result -= queenVal;
-		else if (pos & blackPawns)
-			result -= pawnVal;
-		else if ((pos) & whitePawns)
-			result += pawnVal;
-		else if (pos & whiteQuuens)
-			result += queenVal;
-		if (player == black)
-			result = -result;
-	}
-	std::cout << "rew " << result << std::endl;
-	return (result);
-}
+//int MoveGen::reward(GameState *s, int player) {
+//	const int queenVal = 5;
+//	const int pawnVal = 2;
+//	const BITBOARD blackQuuens = s->blacks() & s->queens();
+//	const BITBOARD whiteQuuens = s->whites() & s->queens();
+//	const BITBOARD blackPawns = s->blacks() & ~s->queens();
+//	const BITBOARD whitePawns = s->whites() & ~s->queens();
+//	int result = 0;
+//
+//	BITBOARD pos;
+//	for (int i = 0; i < 32; i++) {
+//		pos = (1 << pos);
+//		if (pos & blackQuuens)
+//			result -= queenVal;
+//		else if (pos & blackPawns)
+//			result -= pawnVal;
+//		else if ((pos) & whitePawns)
+//			result += pawnVal;
+//		else if (pos & whiteQuuens)
+//			result += queenVal;
+//		if (player == black)
+//			result = -result;
+//	}
+//	std::cout << "rew " << result << std::endl;
+//	return (result);
+//}
 
 /*
  * move_gen.cc

@@ -10,11 +10,17 @@
 #include <stdlib.h>
 #include <iostream>
 
-Game::Game() : currentState(0){
+#include "include/player.h"
+#include "include/move_gen.h"
+#include "include/minmax.h"
+
+Game::Game() : currentState(0), pWhite(0), pBlack(0){
 }
 
 void Game::newGame(){
 	currentState = new GameState(0x00000050, 0x02000000, 0, white);
+	pWhite = new Player(new MinMax(new MoveGen), white, "c++");
+	pBlack = new Player(new MinMax(new MoveGen), black, "c++");
 }
 
 bool Game::isStarted(){
