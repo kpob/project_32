@@ -71,6 +71,7 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
 	}else if(message == newGameMethodId){
 		Game::getInstance().newGame();
 		PostMessage(pp::Var(var_message));
+
 		PostMessage(pp::Var("currentPlayer:black"));
 	}
 }
