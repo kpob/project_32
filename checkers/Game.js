@@ -37,12 +37,6 @@ Checkers.prototype = {
 		//this.controler.startGame();
 	},
 
-	setPlayers : function (){
-//		this.setJSPlayer("white", "random");
-//		this.setNaClPlayer("black", "random"); 
-		naclModule.postMessage('setPlayers,black,js,random,white,nacl,minmax');
-	},
-
 	setJSPlayer : function (color, algorithmName){
 		if(color == "white"){
 			var whitePlayer = new Player();

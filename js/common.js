@@ -1,6 +1,10 @@
 naclModule = null;  // Global application object.
 statusText = 'NO-STATUSES';
 
+String.prototype.startsWith = function(needle){
+    return(this.indexOf(needle) == 0);
+};
+
 function extractSearchParameter(name, def_value) {
   var nameIndex = window.location.search.indexOf(name + "=");
   if (nameIndex != -1) {
@@ -29,21 +33,6 @@ function moduleDidLoad() {
   naclModule = document.getElementById('nacl_module');
 }
 
-function handleMessage(message_event) {
-	var input = document.getElementById('logField');
-	if(message_event.data == 'error')
-		alert("Najpierw musisz rozpoczac gre");
-	else if(message_event.data == 'black')
-		input.innerHTML += 'aktualny gracz: czarny';
-	else if(message_event.data == 'white')
-		input.innerHTML += 'aktualny gracz: bialy';
-	else if(message_event.data == 'start')
-		;//ustawić piony
-	else
-		input.innerHTML += message_event.data;
-  
-}
-
 function pageDidLoad(name, tool, width, height) {
   if (naclModule == null) {
     width = 0; 
@@ -53,13 +42,61 @@ function pageDidLoad(name, tool, width, height) {
   }
 }
 
-//function updateStatus(opt_message) {
-//  if (opt_message) {
-//    statusText = opt_message; 
-//  }
-//  var statusField = document.getElementById('statusField');
-//  if (statusField) {
-//    statusField.innerHTML = statusText;
-//  }
-//}
+function handleMessage(message_event) {
+	var input = document.getElementById('logField');
+	var msg = message_event.data;
+	if(typeof(msg) == 'string') {
+		if(msg.startsWith("setPlayers")){
+			msg = msg.split(':');
+			decodeSetPlayers(msg[1]);	
+		}
+		else if(msg.startsWith("newGame")){
+			newGame();
+		}
+		else if(msg.startsWith("currentPlayer")){
+			makeMove(msg.split(':')[1]);
+		}
+		else{
+			log("log: "+msg);
+		}
+	}
+
+}
+
+function decodeSetPlayers(msg){
+	var splitMsg = msg.split(',');
+
+	var player1 = {
+		color: splitMsg[0],
+		lang: splitMsg[1],
+		algorithm: splitMsg[2]
+	};
+
+	var player2 = {
+		color: splitMsg[3],
+		lang: splitMsg[4],
+		algorithm: splitMsg[5]
+	};
+	log("nacl: setPlayers");
+}
+
+function newGame(){
+	log("nacl: newGame");
+}
+
+function setPlayersToNaCl(){
+	naclModule.postMessage('setPlayers:black,js,random,white,nacl,minmax');
+	log("js: setPlayers");
+}
+
+function sendNewGameToNaCl(){
+	 naclModule.postMessage('newGame');
+	log("js: newGame");
+}
+
+function makeMove(color){
+	log("nacl: now "+color);
+	//naclModule.postMessage("move:"+color
+}
+
 
