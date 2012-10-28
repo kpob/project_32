@@ -32,6 +32,7 @@ Checkers.prototype = {
 		this.model.init();
 		this.view.drawPawns(this.model.fields);
 		
+/*
 		// ustawienie playerów
 		var whitePlayer = new Player();
 		whitePlayer.setAI(new RandomAI());
@@ -44,6 +45,7 @@ Checkers.prototype = {
 		this.controler.setBlackPlayer(blackPlayer);
 		
 		// 1, 2, 3... Go, Go, Go!!! 
-		this.controler.startGame();
+		//this.controler.startGame();
+*/
 	}
 };
