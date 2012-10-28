@@ -1,6 +1,8 @@
+var checkers;
+
 function gStart() {
 	log("Matrix checkers\n");
-	var checkers = new Checkers();
+	checkers = new Checkers();
 	checkers.init();
 };
 
@@ -32,20 +34,26 @@ Checkers.prototype = {
 		this.model.init();
 		this.view.drawPawns(this.model.fields);
 		
-/*
-		// ustawienie playerów
-		var whitePlayer = new Player();
-		whitePlayer.setAI(new RandomAI());
-		whitePlayer.setColor("white");
-		this.controler.setWhitePlayer(whitePlayer);
-		
-		var blackPlayer = new Player();
-		blackPlayer.setColor("black");
-		blackPlayer.setAI(new RandomAI());
-		this.controler.setBlackPlayer(blackPlayer);
-		
-		// 1, 2, 3... Go, Go, Go!!! 
 		//this.controler.startGame();
-*/
-	}
+	},
+
+	setPlayers : function (){
+//		this.setJSPlayer("white", "random");
+//		this.setNaClPlayer("black", "random"); 
+		naclModule.postMessage('setPlayers,black,js,random,white,nacl,minmax');
+	},
+
+	setJSPlayer : function (color, algorithmName){
+		if(color == "white"){
+			var whitePlayer = new Player();
+			whitePlayer.setAI(new RandomAI());
+			whitePlayer.setColor("white");
+			this.controler.setWhitePlayer(whitePlayer);
+		}else{
+			var blackPlayer = new Player();
+			blackPlayer.setColor("black");
+			blackPlayer.setAI(new RandomAI());
+			this.controler.setBlackPlayer(blackPlayer);
+		}
+	},
 };
