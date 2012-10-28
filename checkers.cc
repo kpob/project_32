@@ -46,11 +46,20 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
   
 	if (message == printBoardMethodId){
 		PostMessage(pp::Var(helper::printBoard(Game::getInstance().state())));	
-	}else if (message == newGameMethodId) {
-		Game::getInstance().newGame();
-		PostMessage(pp::Var("start"));		
-		PostMessage(pp::Var("black"));
-		PostMessage(pp::Var("\n"));
+	}else if (message.find("setPlayers") == 0) {
+		size_t sep_pos = message.find_first_of(",");
+		std::string string_arg = message.substr(sep_pos + 1);
+		size_t white_pos = message.find_first_of("white");
+		std::string player1 = message.substr(0, white_pos -1);
+		std::string player2 = message.substr(white_pos + 1, std::string::npos);
+		PostMessage(pp::Var(player1));
+		PostMessage(pp::Var(player2));
+//naclModule.postMessage('setPlayers,black,js,random,white,nacl,minmax');
+
+//		Game::getInstance().newGame();
+//		PostMessage(pp::Var("start"));		
+//		PostMessage(pp::Var("black"));
+//		PostMessage(pp::Var("\n"));
 	}
 }
 

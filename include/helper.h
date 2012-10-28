@@ -11,11 +11,15 @@
 #include "types.h"
 #include "game_state.h"
 #include <string>
+#include <vector>
 
 namespace helper{
 
 BITBOARD shift(int i);
 std::string printBoard(GameState *state);
 BITBOARD reverse(BITBOARD bitboard);
+std::vector<std::string> string2Player(std::string);
 }
+
+
 #endif /* HELPER_H_ */

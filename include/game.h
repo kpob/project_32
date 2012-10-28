@@ -33,6 +33,7 @@ public:
 	}
 
 	void newGame();
+	void newGame(std::string player1, std::string player2);
 	bool isStarted();
 	void updateState(GameState *newState);
 

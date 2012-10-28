@@ -10,6 +10,9 @@
 #include "include/game_state.h"
 #include <sstream>
 #include <string>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 
 namespace helper{
 
@@ -71,6 +74,21 @@ BITBOARD reverse(BITBOARD bitboard) {
 			result += (1 << i);
 	return (result);
 }
+
+std::vector<std::string> string2Player(std::string player){
+	using namespace std;	
+    istringstream iss(player);
+    copy(istream_iterator<string>(iss),
+             istream_iterator<string>(),
+             ostream_iterator<string>(cout, ","));
+
+	vector<string> tokens;
+	copy(istream_iterator<std::string>(iss),
+         istream_iterator<std::string>(),
+         back_inserter<std::vector<std::string> >(tokens));
+	return tokens;
+}
+
 
 }
 
