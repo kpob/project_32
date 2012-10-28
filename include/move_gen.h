@@ -19,6 +19,11 @@ private:
 	int jumpDirections[4];
 	int moveDirections[6];
 
+	MoveGen();
+	MoveGen(const MoveGen &);
+
+	MoveGen& operator=(const MoveGen&);
+
 	GameState * jumpUpLeft(GameState *state,const BITBOARD position);
 	GameState * jumpDownLeft(GameState *state,const BITBOARD position);
 	GameState * jumpUpRight(GameState *state,const BITBOARD position);
@@ -47,13 +52,9 @@ private:
 	//void nextJumps(GameState *gs, int from, std::vector<GameState*> &v);
 
 	//int reward(GameState *s, int player);
-	MoveGen();
-	MoveGen(const MoveGen &);
-
-	MoveGen& operator=(const MoveGen&);
+	
 	
 public:
-	virtual ~MoveGen() {};
 	std::vector<GameState *> genere(int depth);
 	//std::vector<GameState*> nextStates(GameState *gs);
 	static MoveGen& getInstance() {

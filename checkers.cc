@@ -49,6 +49,7 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
 	std::string message = var_message.AsString();
   
 	if (message == printBoardMethodId){
+		PostMessage(pp::Var("lol"));
 		PostMessage(pp::Var(helper::printBoard(Game::getInstance().state())));	
 	}else if (message.find(setPlayersString) == 0) {
 		size_t sep_pos = message.find_first_of(methodSeparator);
@@ -70,13 +71,13 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
 		}
 	}else if(message.find("move") == 0){
 
-		size_t sep_pos = message.find_first_of(methodSeparator);
-		std::string string_arg = message.substr(sep_pos + 1);
-		size_t white_pos = string_arg.find_first_of(argsSeparator);
-		int from = pp::Var(string_arg.substr(0, white_pos)).AsInt();
-		int to = pp::Var(string_arg.substr(white_pos+1, std::string::npos)).AsInt();
+		//size_t sep_pos = message.find_first_of(methodSeparator);
+		//std::string string_arg = message.substr(sep_pos + 1);
+		//size_t white_pos = string_arg.find_first_of(argsSeparator);
+		//int from = pp::Var(string_arg.substr(0, white_pos)).AsInt();
+	//	int to = pp::Var(string_arg.substr(white_pos+1, std::string::npos)).AsInt();
 
-		MoveGen::getInstance().move(Game::getInstance().state(), from, to, true);
+		MoveGen::getInstance().move(Game::getInstance().state(), 23, 19, true);
 
 		PostMessage(pp::Var("move:8,12,white"));
 		MoveGen::getInstance().move(Game::getInstance().state(), 8, 12, true);
