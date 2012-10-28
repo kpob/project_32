@@ -23,10 +23,6 @@
   <script type="text/javascript" src="checkers/AI/RandomAI.js"></script>
 
   <script type="text/javascript">
-    function start() {
-      naclModule.postMessage('newGame');
-    }
-
     function clearLog() {
       var input = document.getElementById('logField');
 	  input.innerHTML = "";
@@ -52,10 +48,10 @@
     <textarea id="logField" name="logField" rows="25" cols="40"></textarea>
     <div/>
     <table>
-    <button id="fortyTwoButton" onclick="start()">New Game</button>
+    <button id="fortyTwoButton" onclick="sendNewGameToNaCl()">New Game</button>
  	<button id="printBoard" onclick="printBoard()">NaCl Print Board</button>
     <button id="reverseTextButton" onclick="clearLog()">Clear Log</button>
-	<button id="setPlayers" onclick="checkers.setPlayers()">Set Players</button>
+	<button id="setPlayers" onclick="setPlayersToNaCl()">Set Players</button>
     <table/>
   </div>
 </body>
