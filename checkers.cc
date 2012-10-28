@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <vector>
 
 #include "ppapi/cpp/input_event.h"
 #include "ppapi/cpp/instance.h"
@@ -49,17 +50,21 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
 	}else if (message.find("setPlayers") == 0) {
 		size_t sep_pos = message.find_first_of(",");
 		std::string string_arg = message.substr(sep_pos + 1);
-		size_t white_pos = message.find_first_of("white");
-		std::string player1 = message.substr(0, white_pos -1);
-		std::string player2 = message.substr(white_pos + 1, std::string::npos);
-		PostMessage(pp::Var(player1));
-		PostMessage(pp::Var(player2));
-//naclModule.postMessage('setPlayers,black,js,random,white,nacl,minmax');
+		size_t white_pos = string_arg.find_first_of("white");
+		std::string player1 = string_arg.substr(0, white_pos -1);
+		std::string player2 = string_arg.substr(white_pos, std::string::npos);
+
+		Game::getInstance().setPlayers(player1, player2);
+		PostMessage(pp::Var("gracz 1"));
+		PostMessage(pp::Var("\n"));
+		PostMessage(pp::Var(Game::getInstance().p1()->lang()));
+		PostMessage(pp::Var("gracz 2"));
+		PostMessage(pp::Var("\n"));
+		PostMessage(pp::Var(Game::getInstance().p2()->lang()));
 
 //		Game::getInstance().newGame();
-//		PostMessage(pp::Var("start"));		
-//		PostMessage(pp::Var("black"));
-//		PostMessage(pp::Var("\n"));
+	}else{
+		PostMessage(pp::Var("dupa"));
 	}
 }
 

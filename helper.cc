@@ -77,15 +77,16 @@ BITBOARD reverse(BITBOARD bitboard) {
 
 std::vector<std::string> string2Player(std::string player){
 	using namespace std;	
-    istringstream iss(player);
-    copy(istream_iterator<string>(iss),
-             istream_iterator<string>(),
-             ostream_iterator<string>(cout, ","));
-
+	std::string arg;
 	vector<string> tokens;
-	copy(istream_iterator<std::string>(iss),
-         istream_iterator<std::string>(),
-         back_inserter<std::vector<std::string> >(tokens));
+	size_t sep_pos = player.find_first_of(",");
+	while(sep_pos != string::npos){
+		arg = player.substr(0, sep_pos);
+		tokens.push_back(arg);
+		player = player.substr(sep_pos+1, string::npos);
+		sep_pos = player.find_first_of(",");
+	}
+	tokens.push_back(player);
 	return tokens;
 }
 

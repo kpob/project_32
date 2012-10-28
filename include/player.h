@@ -21,6 +21,10 @@ public:
 	Player(AI *algoritihm, int color, std::string language);
 	~Player();
 
+	std::string lang(){
+		return language;	
+	}
+
 };
 
 

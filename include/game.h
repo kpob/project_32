@@ -21,6 +21,7 @@ private:
 	Player *pWhite;
 	Player *pBlack;
 
+	bool isSet;
 public:
 
 	static Game& getInstance() {
@@ -32,8 +33,19 @@ public:
 		return (currentState);
 	}
 
+	Player *p1(){
+		return pWhite;
+	}
+
+	Player *p2(){
+		return pBlack;
+	}
+
 	void newGame();
-	void newGame(std::string player1, std::string player2);
+//	void newGame(std::string player1, std::string player2);
+
+	void setPlayers(std::string player1, std::string player2);
+
 	bool isStarted();
 	void updateState(GameState *newState);
 
