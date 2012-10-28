@@ -58,10 +58,11 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
 		PostMessage(pp::Var("gracz 1"));
 		PostMessage(pp::Var("\n"));
 		PostMessage(pp::Var(Game::getInstance().p1()->lang()));
+		PostMessage(pp::Var("\n"));		
 		PostMessage(pp::Var("gracz 2"));
 		PostMessage(pp::Var("\n"));
 		PostMessage(pp::Var(Game::getInstance().p2()->lang()));
-
+		PostMessage(var_message);
 //		Game::getInstance().newGame();
 	}else{
 		PostMessage(pp::Var("dupa"));
