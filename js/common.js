@@ -96,7 +96,8 @@ function sendNewGameToNaCl(){
 
 function makeMove(color){
 	log("nacl: now "+color);
-	//naclModule.postMessage("move:"+color
+	naclModule.postMessage("move:23,19");
+	checkers.view.moveFigure(23, 19);
 }
 
 
