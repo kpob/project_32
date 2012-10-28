@@ -9,6 +9,7 @@
 #define GAME_H_
 
 #include "board.h"
+#include "player.h"
 
 class Game {
 private:
@@ -16,10 +17,9 @@ private:
 	Game(const Game &);
 
 	Game& operator=(const Game&);
-
-	//logic::Board *board;
 	GameState *currentState;
-
+	Player *pWhite;
+	Player *pBlack;
 
 public:
 
