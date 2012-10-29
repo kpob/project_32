@@ -20,7 +20,7 @@ Game::Game() : currentState(0), previousState(0), pWhite(0), pBlack(0), isSet(fa
 }
 
 void Game::newGame(){
-	currentState = new GameState(0x00000fff, 0xfff00000, 0, black);
+	currentState = new GameState(0x00080000, 0x0000200, 0x00080200, black);
 }
 
 void Game::setPlayers(std::string player1, std::string player2){
@@ -50,7 +50,7 @@ void Game::setPlayers(std::string player1, std::string player2){
 		else if(pBlackArgs.at(2) == "montecarlo")
 			pBlack = new Player(new MinMax(), black, "nacl");
 		else if(pBlackArgs.at(2) == "random")
-			pWhite = new Player(new Random(), black, "nacl");
+			pBlack = new Player(new Random(), black, "nacl");
 	}
 
 	isSet = true;
