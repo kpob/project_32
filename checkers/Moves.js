@@ -58,7 +58,7 @@ Moves.prototype = {
 
 	movesList : function(fields) {
 		var moves = [];
-
+/*
 		for ( var i = 0; i < 32; i++) {
 			// pionek musi byc biały
 			if (fields[i].isWhite()) {
@@ -75,7 +75,7 @@ Moves.prototype = {
 				}
 			}
 		}
-
+*/
 		// nie znaleziono bicia
 		if (moves.length == 0) {
 			for ( var i = 0; i < 32; i++) {

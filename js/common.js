@@ -54,12 +54,14 @@ function handleMessage(message_event) {
 			newGame();
 		}
 		else if(msg.startsWith("jsMove")){
-			log("ss "+msg);
-			makeMove();
+			
+			setTimeout(makeMove, 1000);
 		}
-//		else if(msg.startsWith("move")){
-//			makeNaClMove(msg.split(':')[1]);
-//		}
+		else if(msg.startsWith("move")){
+			setTimeout(function(){
+				makeNaClMove(msg.split(':')[1]);
+			}, 1000);
+		}
 		else{
 			log("log: "+msg);
 		}
@@ -94,7 +96,7 @@ function newGame(){
 }
 
 function setPlayersToNaCl(){
-	naclModule.postMessage('setPlayers:black,js,random,white,nacl,minmax');
+	naclModule.postMessage('setPlayers:black,js,random,white,nacl,random');
 	log("js: setPlayers");
 }
 
@@ -104,16 +106,72 @@ function sendNewGameToNaCl(){
 }
 
 function makeMove(){
-	log("make move");
+	log("JSMove");
+	var fields = checkers.controler.getFields();
+	var moves = Moves.getMovesForBlack(fields);
+	if(moves.length > 0){
+		var moveNr = Math.floor(Math.random()*moves.length);
+		var beatingList = [];
+			//jeśli przynajmniej jednen ruch to bicie to mamy do czynienia
+			//z samymi biciami
+		var from = moves[moveNr].from;
+		var to = moves[moveNr].to;
+		Moves.moveBlack(fields, from, to, beatingList);
+		checkers.controler.view.moveFigure(from, to);
+		log("js: "+from+"->"+to);
+		naclModule.postMessage("move:"+from+","+to);			
+		
+/*
+		if(moves[0].beating){
+			for(i in moves[moveNr].beating){
+				beatingList.push(moves[moveNr].beating[i].beat);
+			}
+		}
+		
+		for(i in beatingList){
+			checkers.controler.view.deleteFigure(beatingList[i]);
+		}
+		if(moves[0].beating){
+			for(i in moves[moveNr].beating){
+				if(i == 0){
+					var end = moves[moveNr].beating[i].end;
+					naclModule.postMessage("move:"+from+","+end);				
+				}else{
+					var prevEnd = moves[moveNr].beating[i-1].end;
+					naclModule.postMessage("move:"+prevEnd+","+end);
+				}
+			}
+			naclModule.postMessage("move:"+moves[moveNr].beating[moves[moveNr].beating.length-1]+","+to);
+		}else{
+			naclModule.postMessage("move:"+from+","+to);			
+		}
+
+		
+		naclModule.postMessage("move:"+from+","+moves[moveNr].to);
+		//log("jsmove:"+moves[moveNr].from+","+moves[moveNr].to);
+*/
+	}
 	// zrobić ruch swoim playerem i go wysłać do NaCl i na view.
-	naclModule.postMessage("move:22,18");
+//	naclModule.postMessage("move:22,18");
 	// checkers.view.moveFigure(23, 19);
 }
 
 function makeNaClMove(move){
+	log("NaClMove");
 	move = move.split(',');
-	for(i in move)
-		log(i+" "+move[i]);
+	var fields = checkers.controler.getFields();
+	var from = parseInt(move[0]);
+	var to = parseInt(move[1]);	
+	var beatingList = [];
+	for(var i = 2; i<move.length; i++)
+		beatingList.push(parseInt(move[i]));
+	Moves.moveWhite(fields, from, to, beatingList);
+	
+	checkers.controler.view.moveFigure(from, to);
+	for(i in beatingList){
+		checkers.controler.view.deleteFigure(beatingList[i]);
+	}
+		
 }
 
 
