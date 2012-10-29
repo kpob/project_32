@@ -24,21 +24,21 @@ void Game::newGame(){
 }
 
 void Game::setPlayers(std::string player1, std::string player2){
-	std::vector<std::string> pWhiteArgs = helper::args2vector(player1);
-	std::vector<std::string> pBlackArgs = helper::args2vector(player2);
+	std::vector<std::string> pBlackArgs = helper::args2vector(player1);
+	std::vector<std::string> pWhiteArgs = helper::args2vector(player2);
 
-//	if(pWhiteArgs.at(1) == "js"){
-//		pWhite = new Player(0, white, "js");
-//	}else{
-//		if(pWhiteArgs.at(2) == "minmax")
-//			pWhite = new Player(new MinMax(), white, "nacl");
-//		else if(pWhiteArgs.at(2) == "ab")
-//			pWhite = new Player(new MinMax(), white, "nacl");
-//		else if(pWhiteArgs.at(2) == "montecarlo")
-//			pWhite = new Player(new MinMax(), white, "nacl");
-//		else if(pWhiteArgs.at(2) == "random")
+	if(pWhiteArgs.at(1) == "js"){
+		pWhite = new Player(0, white, "js");
+	}else{
+		if(pWhiteArgs.at(2) == "minmax")
+			pWhite = new Player(new MinMax(), white, "nacl");
+		else if(pWhiteArgs.at(2) == "ab")
+			pWhite = new Player(new MinMax(), white, "nacl");
+		else if(pWhiteArgs.at(2) == "montecarlo")
+			pWhite = new Player(new MinMax(), white, "nacl");
+		else if(pWhiteArgs.at(2) == "random")
 			pWhite = new Player(new Random(), white, "nacl");
-//	}
+	}
 
 	if(pBlackArgs.at(1) == "js"){
 		pBlack = new Player(0, black, "js");
@@ -49,7 +49,7 @@ void Game::setPlayers(std::string player1, std::string player2){
 			pBlack = new Player(new MinMax(), black, "nacl");
 		else if(pBlackArgs.at(2) == "montecarlo")
 			pBlack = new Player(new MinMax(), black, "nacl");
-		else if(pWhiteArgs.at(2) == "random")
+		else if(pBlackArgs.at(2) == "random")
 			pWhite = new Player(new Random(), black, "nacl");
 	}
 

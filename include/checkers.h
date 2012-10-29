@@ -18,12 +18,16 @@ class CheckersInstance : public pp::Instance {
 	private:
 		CheckersInstance(const CheckersInstance&);  // Disallow copy
 
+		void makeNaclMove();
+
 		void handlePrintBoard();
 		void handleMove(const std::string& message);
 		void handleNewGame(const std::string& message);
 		void handleSetPlayers(const std::string& message);
 
 		void makeMovesFromVector(const std::vector<std::string> movesVector);
+
+		void sendMovePrompt();
 };
 
 }
