@@ -35,10 +35,6 @@ Player.prototype = {
 				}
 			}
 			this.move(fields, moves[moveNr].from, moves[moveNr].to, beatingList);
-			var self = this;
-			setTimeout(function(){
-				self.controler.move();
-			}, self.speed);
 		} else {
 			this.win();
 		}

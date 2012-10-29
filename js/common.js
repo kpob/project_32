@@ -53,9 +53,13 @@ function handleMessage(message_event) {
 		else if(msg.startsWith("newGame")){
 			newGame();
 		}
-		else if(msg.startsWith("currentPlayer")){
-			makeMove(msg.split(':')[1]);
+		else if(msg.startsWith("jsMove")){
+			log("ss "+msg);
+			makeMove();
 		}
+//		else if(msg.startsWith("move")){
+//			makeNaClMove(msg.split(':')[1]);
+//		}
 		else{
 			log("log: "+msg);
 		}
@@ -78,6 +82,11 @@ function decodeSetPlayers(msg){
 		algorithm: splitMsg[5]
 	};
 	log("nacl: setPlayers");
+
+	if(player1.lang == "js")
+		checkers.setJSPlayer(player1.color, player1.algorithm);
+	if(player2.lang == "js")
+		checkers.setJSPlayer(player2.color, player2.algorithm);
 }
 
 function newGame(){
@@ -94,10 +103,17 @@ function sendNewGameToNaCl(){
 	log("js: newGame");
 }
 
-function makeMove(color){
-	log("nacl: now "+color);
-	naclModule.postMessage("move:23,19");
-	checkers.view.moveFigure(23, 19);
+function makeMove(){
+	log("make move");
+	// zrobić ruch swoim playerem i go wysłać do NaCl i na view.
+	naclModule.postMessage("move:22,18");
+	// checkers.view.moveFigure(23, 19);
+}
+
+function makeNaClMove(move){
+	move = move.split(',');
+	for(i in move)
+		log(i+" "+move[i]);
 }
 
 

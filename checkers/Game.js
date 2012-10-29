@@ -33,17 +33,17 @@ Checkers.prototype = {
 		// inicjalizacja planszy
 		this.model.init();
 		this.view.drawPawns(this.model.fields);
-		
-		//this.controler.startGame();
 	},
 
 	setJSPlayer : function (color, algorithmName){
 		if(color == "white"){
+			log("W");
 			var whitePlayer = new Player();
 			whitePlayer.setAI(new RandomAI());
 			whitePlayer.setColor("white");
 			this.controler.setWhitePlayer(whitePlayer);
 		}else{
+			log("B");
 			var blackPlayer = new Player();
 			blackPlayer.setColor("black");
 			blackPlayer.setAI(new RandomAI());

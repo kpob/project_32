@@ -1,4 +1,4 @@
-Controler = function(){
+	Controler = function(){
 	// Elementy systemu
 	this.view = {};
 	this.model = {};
@@ -33,10 +33,6 @@ Controler.prototype = {
 			this.blackPlayer.setControler(this);
 		},
 		
-		startGame : function(){
-			this.whitePlayer.makeMove();
-		},
-		
 		getFields : function() {
 			return this.model.getFields();
 		},
@@ -65,6 +61,5 @@ Controler.prototype = {
 					self.whitePlayer.makeMove();
 				}, 1);
 			}
-		}
-		
+		}		
 };
