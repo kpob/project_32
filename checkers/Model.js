@@ -14,14 +14,15 @@ Model.prototype = {
 			this.fields[i] = new Field();
 		}
 		// ustawienie pionków
-		this.setFields("black", [ 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 ]);
-		this.setFields("white", [ 0, 1, 2, 3, 4, 5,6, 7,8, 9, 10, 11]);
+		this.setFields("black", [9]);
+		this.setFields("white", [19]);
+
 //		this.setFields("black", [ 31, 30, 29, 28, 27, 26 ]);
 //		this.setFields("white", [ 0, 1, 2, 3, 4, 5,6, 7,8]);
 //		this.setFields("black", [ 27, 26 ]);
 //		this.setFields("white", [ 8, 9, 10]);
-//		this.fields[26].setQueen();
-//		this.fields[27].setQueen();
+		this.fields[19].setQueen();
+		this.fields[9].setQueen();
 //		this.fields[8].setQueen();
 //		this.fields[9].setQueen();
 //		this.fields[10].setQueen();

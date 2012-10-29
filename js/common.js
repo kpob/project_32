@@ -54,11 +54,15 @@ function handleMessage(message_event) {
 			newGame();
 		}
 		else if(msg.startsWith("jsMove")){
-			
-			setTimeout(makeMove, 1000);
+			if(!stop)
+				setTimeout(function(){
+					log("timeout js");
+					makeMove();
+				}, 2000);
 		}
 		else if(msg.startsWith("move")){
 			setTimeout(function(){
+				log("timeout nacl");
 				makeNaClMove(msg.split(':')[1]);
 			}, 1000);
 		}
@@ -68,6 +72,7 @@ function handleMessage(message_event) {
 	}
 
 }
+
 
 function decodeSetPlayers(msg){
 	var splitMsg = msg.split(',');
@@ -155,23 +160,26 @@ function makeMove(){
 //	naclModule.postMessage("move:22,18");
 	// checkers.view.moveFigure(23, 19);
 }
-
+var stop = false;
 function makeNaClMove(move){
-	log("NaClMove");
 	move = move.split(',');
+	log("NaClMove: "+move[0]+"->"+move[1]);
 	var fields = checkers.controler.getFields();
 	var from = parseInt(move[0]);
 	var to = parseInt(move[1]);	
-	var beatingList = [];
-	for(var i = 2; i<move.length; i++)
-		beatingList.push(parseInt(move[i]));
-	Moves.moveWhite(fields, from, to, beatingList);
 	
+	var beatingList = [];
+	Moves.moveWhite(fields, from, to, beatingList);
 	checkers.controler.view.moveFigure(from, to);
+	naclModule.postMessage("printBoard");
+/*	for(var i = 2; i<move.length; i++)
+		beatingList.push(parseInt(move[i]));
+	
 	for(i in beatingList){
 		checkers.controler.view.deleteFigure(beatingList[i]);
 	}
-		
+*/
+			
 }
 
 
