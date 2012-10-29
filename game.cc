@@ -62,6 +62,14 @@ bool Game::isStarted(){
 	return (true);
 }
 
+int Game::winner(){
+//	MoveGen &generator = MoveGen::getInstance();
+	return 0;
+//	if(generator->getJumpers(currentState) || generator->getMovers(currentState))
+//		return (false);
+//	return (true);
+}
+
 bool Game::arePlayersSet(){
 	if(isSet == false)
 		return (false);

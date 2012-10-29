@@ -96,7 +96,7 @@ void CheckersInstance::handleMove(const std::string& message){
 	//format otrzymanej wiadomosci [metoda]:[z],[do]
 	std::string stringArgs = helper::message2stringArgs(message);
 	std::vector<std::string> argsVector = helper::args2vector(stringArgs);
-
+		
 	makeMovesFromVector(argsVector);
 	makeNaclMove();
 }
@@ -123,8 +123,13 @@ void CheckersInstance::makeNaclMove(){
 	helper::bitboard2stream(ss, opponentPawnsDiff);
 	
 	size_t lastComma = ss.str().find_last_of(argsSeparator);
-	PostMessage(pp::Var(ss.str().substr(0, lastComma)));
-	sendMovePrompt();
+
+	if(Game::getInstance().state() == 0){
+		PostMessage(pp::Var("error:illegalBoardState"));
+	}else{
+		PostMessage(pp::Var(ss.str().substr(0, lastComma)));
+		sendMovePrompt();
+	}
 }
 
 void CheckersInstance::sendMovePrompt(){

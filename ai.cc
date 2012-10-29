@@ -28,7 +28,7 @@ AI::AI(){
  */
 
 std::vector<GameState*> AI::nextStates(GameState *gs) {
-	MoveGen &generator = MoveGen::getInstance();
+	//MoveGen &generator = MoveGen::getInstance();
 	std::vector<GameState*> v;
 	int player = gs->player();
 	for (unsigned i = 0; i < 32; i++) {
@@ -40,10 +40,10 @@ std::vector<GameState*> AI::nextStates(GameState *gs) {
 				continue;
 		}
 
-		if (!generator.getJumpers(gs))
+		//if (!generator.getJumpers(gs))
 			nextMoves(gs, i, v);
-		else
-			nextJumps(gs,i, v);
+		//else
+		//	nextJumps(gs,i, v);
 	}
 	return (v);
 }
