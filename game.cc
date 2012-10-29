@@ -62,14 +62,6 @@ bool Game::isStarted(){
 	return (true);
 }
 
-int Game::winner(){
-//	MoveGen &generator = MoveGen::getInstance();
-	return 0;
-//	if(generator->getJumpers(currentState) || generator->getMovers(currentState))
-//		return (false);
-//	return (true);
-}
-
 bool Game::arePlayersSet(){
 	if(isSet == false)
 		return (false);
@@ -85,7 +77,7 @@ void Game::updateState(GameState* newState) {
 }
 
 BITBOARD Game::lastMoveBitboard(){
-	BITBOARD move;
+	BITBOARD move = 0;
 	if(previousState->player() == white)
 		move = previousState->whites() ^ currentState->whites();
 	else	

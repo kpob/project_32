@@ -18,11 +18,11 @@ enum directions {
 
 
 enum color {
-	cBlack=1, cWhite=2, empty=3
+	cBlack, cWhite, empty
 };
 
 enum player {
-	 black=1, white=2
+	 black, white
 };
 
 

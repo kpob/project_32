@@ -116,20 +116,15 @@ void CheckersInstance::makeNaclMove(){
 	Game::getInstance().currentPlayer()->nextMove();
 	uint32_t move = Game::getInstance().lastMoveBitboard();
 	helper::bitboard2stream(ss, move);
-	
+	PostMessage(pp::Var("ddd"));
 	Game::getInstance().state()->tooglePlayer();
-
 	uint32_t opponentPawnsDiff = Game::getInstance().opponentPawnsDiffBitboard();
 	helper::bitboard2stream(ss, opponentPawnsDiff);
 	
 	size_t lastComma = ss.str().find_last_of(argsSeparator);
 
-	//if(Game::getInstance().state() == 0){
-		//PostMessage(pp::Var("error:illegalBoardState"));
-	//}else{
-		PostMessage(pp::Var(ss.str().substr(0, lastComma)));
-		sendMovePrompt();
-//	}
+	PostMessage(pp::Var(ss.str().substr(0, lastComma)));
+	sendMovePrompt();
 }
 
 void CheckersInstance::sendMovePrompt(){

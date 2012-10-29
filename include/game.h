@@ -55,7 +55,6 @@ public:
 	void setPlayers(std::string player1, std::string player2);
 
 	bool isStarted();
-	int winner();
 	bool arePlayersSet();
 
 	BITBOARD lastMoveBitboard();
