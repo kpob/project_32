@@ -17,7 +17,10 @@ private:
 	Game(const Game &);
 
 	Game& operator=(const Game&);
+	
 	GameState *currentState;
+	GameState *previousState;
+
 	Player *pWhite;
 	Player *pBlack;
 
@@ -33,6 +36,10 @@ public:
 		return (currentState);
 	}
 
+	GameState *prevState() {
+		return (previousState);
+	}
+
 	Player *p1(){
 		return pWhite;
 	}
@@ -41,6 +48,8 @@ public:
 		return pBlack;
 	}
 
+	Player *currentPlayer();
+
 	void newGame();
 
 	void setPlayers(std::string player1, std::string player2);
@@ -48,6 +57,8 @@ public:
 	bool isStarted();
 	bool arePlayersSet();
 
+	BITBOARD lastMoveBitboard();
+	BITBOARD opponentPawnsDiffBitboard();
 	void updateState(GameState *newState);
 
 };

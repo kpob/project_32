@@ -25,6 +25,8 @@ public:
 		return language;	
 	}
 
+	void nextMove();
+
 };
 
 

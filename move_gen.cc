@@ -1,3 +1,10 @@
+/*
+ * move_gen.cc
+ *
+ *  Created on: 24-10-2012
+ *      Author: Krzysztof Pobiarżyn
+ */
+
 #include "include/move_gen.h"
 #include "include/helper.h"
 #include <stdint.h>
@@ -7,77 +14,6 @@
 
 MoveGen::MoveGen(){
 }
-
-
-///*
-// * AI ALGORITIHMS
-// */
-//
-//int MoveGen::MinMax(GameState *state, int depth){
-//	//GameState * gs = Game::getInstance().state();
-//	//Game::getInstance().state()->player();
-//	std::vector<GameState *> next = nextStates(state);
-//	std::cout << "state " << state << " depth " << depth << " ruch " <<state->player() << std::endl;
-//	std::cout << "size " << next.size() << std::endl;
-//	for(unsigned i=0; i<next.size(); i++){
-//		std::cout << next.at(i) << " next.at(" << i << ") blacks " << next.at(i)->blacks()
-//				<< " white " << next.at(i)->whites() << std::endl;
-//	}
-//	if (next.size() == 0 || depth == 0)
-//		return (reward(state, Game::getInstance().state()->player()));
-//	//std::cout << "next.at(0) " << next.at(0)->blacks() << " " << next.at(0)->whites() << std::endl;
-//	int result = MinMax(next.at(0), depth-1);
-//	if(state->player() == Game::getInstance().state()->player()){
-//		std::cout << "me" << std::endl;
-//		for(unsigned i=1; i<next.size(); i++){
-//			int val = MinMax(next.at(i), depth-1);
-//			if(val > result)
-//				result = val;
-//		}
-//	}else{
-//		std::cout << "opp" << std::endl;
-//		for(unsigned i=1; i<next.size(); i++){
-//			int val = MinMax(next.at(i), depth-1);
-//			if(val < result)
-//				result = val;
-//		}
-//	}
-//	return (result);
-//}
-
-//int MoveGen::reward(GameState *s, int player) {
-//	const int queenVal = 5;
-//	const int pawnVal = 2;
-//	const BITBOARD blackQuuens = s->blacks() & s->queens();
-//	const BITBOARD whiteQuuens = s->whites() & s->queens();
-//	const BITBOARD blackPawns = s->blacks() & ~s->queens();
-//	const BITBOARD whitePawns = s->whites() & ~s->queens();
-//	int result = 0;
-//
-//	BITBOARD pos;
-//	for (int i = 0; i < 32; i++) {
-//		pos = (1 << pos);
-//		if (pos & blackQuuens)
-//			result -= queenVal;
-//		else if (pos & blackPawns)
-//			result -= pawnVal;
-//		else if ((pos) & whitePawns)
-//			result += pawnVal;
-//		else if (pos & whiteQuuens)
-//			result += queenVal;
-//		if (player == black)
-//			result = -result;
-//	}
-//	std::cout << "rew " << result << std::endl;
-//	return (result);
-//}
-
-/*
- * move_gen.cc
- *
- *  Created on: 24-10-2012
- *      Author: qwerty
- */
 
 bool MoveGen::isEmpty(GameState *state, int32_t position) {
 	return (((state->whites() | state->blacks()) & position) ? false : true);
@@ -440,3 +376,13 @@ BITBOARD MoveGen::getJumpers(GameState *state) {
 
 	return (movers);
 }
+
+void MoveGen::nextMove(int from, int to){
+	int diff = from - to;
+	if(diff >= -5 && diff < 5)
+		move(Game::getInstance().state(), from, to, true);
+	else if(diff < -5 && diff > 5)
+		jump(Game::getInstance().state(), from, to, true);
+}
+
+

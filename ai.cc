@@ -2,7 +2,7 @@
  * ai.cc
  *
  *  Created on: 26-10-2012
- *      Author: qwerty
+ *      Author: Krzysztof Pobiarżyn
  */
 
 #include "include/ai.h"

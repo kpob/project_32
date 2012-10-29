@@ -2,7 +2,7 @@
  * helper.cc
  *
  *  Created on: 24-10-2012
- *      Author: qwerty
+ *      Author: Krzysztof Pobiarżyn
  */
 
 #include "include/helper.h"
@@ -75,9 +75,9 @@ BITBOARD reverse(BITBOARD bitboard) {
 	return (result);
 }
 
-std::vector<std::string> string2Player(std::string player){
+std::vector<std::string> args2vector(std::string player){
 	using namespace std;	
-	std::string arg;
+	string arg;
 	vector<string> tokens;
 	size_t sep_pos = player.find_first_of(",");
 	while(sep_pos != string::npos){
@@ -88,6 +88,17 @@ std::vector<std::string> string2Player(std::string player){
 	}
 	tokens.push_back(player);
 	return tokens;
+}
+
+void bitboard2stream(std::stringstream &stream, const uint32_t bitboard){
+	for(int i=0; i<32; i++)
+		if(bitboard & (1<<i))
+			stream << i << ",";
+}
+
+std::string message2stringArgs(const std::string message){
+	size_t sepPos = message.find_first_of(":");
+	return (message.substr(sepPos + 1));
 }
 
 

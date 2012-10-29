@@ -20,11 +20,10 @@ namespace checkers {
 const char* const printBoardMethodId = "printBoard";
 const char* const newGameMethodId = "newGame";
 const char* const setPlayersString = "setPlayers";
+const char* const moveMethodId = "move";
 
 const char* const methodSeparator = ":";
 const char* const argsSeparator = ",";
-
-
 
 /*
 *	INSTANCE CLASS IMPLEMENTATION
@@ -48,51 +47,73 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
 	
 	std::string message = var_message.AsString();
   
-	if (message == printBoardMethodId){
-		PostMessage(pp::Var("lol"));
-		PostMessage(pp::Var(helper::printBoard(Game::getInstance().state())));	
-	}else if (message.find(setPlayersString) == 0) {
-		size_t sep_pos = message.find_first_of(methodSeparator);
-		std::string string_arg = message.substr(sep_pos + 1);
-		size_t white_pos = string_arg.find_first_of("white");
-		std::string player1 = string_arg.substr(0, white_pos -1);
-		std::string player2 = string_arg.substr(white_pos, std::string::npos);
+	if (message == printBoardMethodId)
+		handlePrintBoard();
+	else if (message.find(setPlayersString) == 0) 
+		handleSetPlayers(message);
+	else if(message == newGameMethodId)
+		handleNewGame(message);
+	else if(message.find(moveMethodId) == 0)
+		handleMove(message);
+	
+}
 
-		Game::getInstance().setPlayers(player1, player2);
-		PostMessage(var_message);
+void CheckersInstance::handlePrintBoard(){
+	PostMessage(pp::Var(helper::printBoard(Game::getInstance().state())));	
+}
 
-	}else if(message == newGameMethodId){
-		if(Game::getInstance().arePlayersSet()){
-			Game::getInstance().newGame();
-			PostMessage(pp::Var(var_message));
-			PostMessage(pp::Var("currentPlayer:black"));
-		}else{
-			PostMessage(pp::Var("error:unsettedPlayers"));
-		}
-	}else if(message.find("move") == 0){
+void CheckersInstance::handleSetPlayers(const std::string& message){
+	//format otrzymanej wiadomosci [metoda]:[kolor],[algorytm],[js/nacl],[kolor],[algorytm],[js/nacl]
+	size_t sepPos = message.find_first_of(methodSeparator);
+	std::string stringArgs = message.substr(sepPos + 1);
+	
+	size_t whitePos = stringArgs.find_first_of("white");
+	
+	std::string player1 = stringArgs.substr(0, whitePos -1);
+	std::string player2 = stringArgs.substr(whitePos, std::string::npos);
+	Game::getInstance().setPlayers(player1, player2);
 
-		//size_t sep_pos = message.find_first_of(methodSeparator);
-		//std::string string_arg = message.substr(sep_pos + 1);
-		//size_t white_pos = string_arg.find_first_of(argsSeparator);
-		//int from = pp::Var(string_arg.substr(0, white_pos)).AsInt();
-	//	int to = pp::Var(string_arg.substr(white_pos+1, std::string::npos)).AsInt();
+	PostMessage(pp::Var(message)); // javascript musi rowniez ustawic playerow
+}
 
-		MoveGen::getInstance().move(Game::getInstance().state(), 23, 19, true);
-
-		PostMessage(pp::Var("move:8,12,white"));
-		MoveGen::getInstance().move(Game::getInstance().state(), 8, 12, true);
+void CheckersInstance::handleNewGame(const std::string& message){
+	if(Game::getInstance().arePlayersSet()){
+		Game::getInstance().newGame();
+		PostMessage(pp::Var(message));
+		PostMessage(pp::Var("currentPlayer:black"));
+	}else{
+		PostMessage(pp::Var("error:unsettedPlayers"));
 	}
 }
 
+void CheckersInstance::handleMove(const std::string& message){
+	//format otrzymanej wiadomosci [metoda]:[z],[do]
+	std::string stringArgs = helper::message2stringArgs(message);
+	std::vector<std::string> argsVector = helper::args2vector(stringArgs);
 
-void CheckersInstance::tooglePlayer(){
-//	if(Game::getInstance().player() == black)
-//		PostMessage(pp::Var("black"));
-//	else
-//		PostMessage(pp::Var("white"));
+	makeMovesFromVector(argsVector);
 	
-	PostMessage(pp::Var("\n"));
-//	Game::getInstance().tooglePalyer();
+	Game::getInstance().currentPlayer()->nextMove();
+	Game::getInstance().state()->tooglePlayer();
+
+	std::stringstream ss("move:");
+	uint32_t move = Game::getInstance().lastMoveBitboard();
+	helper::bitboard2stream(ss, move);
+
+	uint32_t opponentPawnsDiff = Game::getInstance().opponentPawnsDiffBitboard();
+	helper::bitboard2stream(ss, opponentPawnsDiff);
+	
+	size_t lastComma = ss.str().find_last_of(argsSeparator);
+	PostMessage(pp::Var(ss.str().substr(0, lastComma)));
+}
+
+void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesVector){
+	for(unsigned i=0; i<movesVector.size(); i+=2){
+		int from = atoi(movesVector.at(i).c_str());
+		int to = atoi(movesVector.at(i+1).c_str());
+		MoveGen::getInstance().nextMove(from, to);
+	}
+	Game::getInstance().state()->tooglePlayer();
 }
 
 }

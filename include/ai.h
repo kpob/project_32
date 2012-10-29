@@ -2,7 +2,7 @@
  * ai.h
  *
  *  Created on: 26-10-2012
- *      Author: qwerty
+ *      Author: Krzysztof Pobiarżyn
  */
 
 #ifndef AI_H_
@@ -26,8 +26,9 @@ protected:
 public:
 	AI();
 	virtual ~AI(){}
-
+	virtual int compute(GameState *state, int depth) = 0;
 	std::vector<GameState *> nextStates(GameState *gs);
+	
 };
 
 

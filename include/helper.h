@@ -18,7 +18,12 @@ namespace helper{
 BITBOARD shift(int i);
 std::string printBoard(GameState *state);
 BITBOARD reverse(BITBOARD bitboard);
-std::vector<std::string> string2Player(std::string);
+std::vector<std::string> args2vector(std::string);
+
+void bitboard2stream(std::stringstream &stream, const uint32_t bitboard);
+
+std::string message2stringArgs(const std::string message);
+
 }
 
 

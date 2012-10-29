@@ -2,7 +2,7 @@
  * minmax.h
  *
  *  Created on: 26-10-2012
- *      Author: qwerty
+ *      Author: Krzysztof Pobiarżyn
  */
 
 #ifndef MINMAX_H_
