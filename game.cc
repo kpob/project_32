@@ -20,7 +20,7 @@ Game::Game() : currentState(0), previousState(0), pWhite(0), pBlack(0), isSet(fa
 }
 
 void Game::newGame(){
-	currentState = new GameState(0x000000ff, 0xff000000, 0, black);
+	currentState = new GameState(0x00000ff0, 0x0ff00000, 0, white);
 }
 
 void Game::setPlayers(std::string player1, std::string player2){

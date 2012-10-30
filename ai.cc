@@ -40,7 +40,7 @@ std::vector<GameState*> AI::nextStates(GameState *gs) {
 				continue;
 		}
 
-		if (!generator.getJumpers(gs))
+		if (generator.getJumpers(gs) == 0)
 			nextMoves(gs, i, v);
 		else
 			nextJumps(gs,i, v);

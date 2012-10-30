@@ -119,7 +119,9 @@ void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesV
 
 void CheckersInstance::makeNaclMove(){
 	std::stringstream ss;
+
 	ss << moveMethodId;	
+	srand(time(NULL));
 	Game::getInstance().currentPlayer()->nextMove();
 	
 	uint32_t move = Game::getInstance().lastMoveBitboard();
@@ -139,7 +141,10 @@ void CheckersInstance::makeNaclMove(){
 	helper::bitboard2stream(ss, opponentPawnsDiff);
 	
 	size_t lastComma = ss.str().find_last_of(argsSeparator);
-	PostMessage(pp::Var(ss.str().substr(0, lastComma)));
+	if(lastComma != 0)
+		PostMessage(pp::Var(ss.str().substr(0, lastComma)));
+	else
+		PostMessage(pp::Var("CHUJ"));
 	sendMovePrompt();
 }
 

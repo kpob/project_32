@@ -98,6 +98,7 @@ function decodeSetPlayers(msg){
 
 function newGame(){
 	log("nacl: newGame");
+	naclModule.postMessage('printBoard');
 }
 
 function setPlayersToNaCl(){
