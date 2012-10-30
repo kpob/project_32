@@ -366,6 +366,7 @@ Moves.prototype = {
 	deletePawns : function(fields, beatList) {
 		if(beatList){
 			for(i in beatList){
+				log("zbijam "+beatList[i]);
 				fields[beatList[i]].setFree();
 			}
 		}

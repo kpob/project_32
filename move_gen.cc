@@ -379,9 +379,9 @@ BITBOARD MoveGen::getJumpers(GameState *state) {
 
 void MoveGen::nextMove(int from, int to){
 	int diff = from - to;
-	if(diff >= -5 && diff < 5)
+	if(diff >= -5 && diff <= 5)
 		move(Game::getInstance().state(), from, to, true);
-	else if(diff < -5 && diff > 5)
+	else if(diff < -5 || diff > 5)
 		jump(Game::getInstance().state(), from, to, true);
 }
 

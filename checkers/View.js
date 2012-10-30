@@ -168,6 +168,9 @@ View.prototype = {
 
 	getFigure : function(position) {
 		var list = this.figuresList;
+		log("szukana: "+position);
+		for (j in list)
+			log(j+") "+list[j].position);	
 		for (i in list) {
 			if (list[i].position == position) {
 				return list[i];
@@ -176,6 +179,7 @@ View.prototype = {
 	},
 
 	deleteFigure : function(position) {
+		log("to delete :"+position);
 		var figuresList = this.figuresList;
 		var counter = 0;
 		for (i in figuresList) {
@@ -187,7 +191,7 @@ View.prototype = {
 		var squareToRemove = figuresList[counter];
 		squareToRemove.transitionTo({
 			opacity : 0,
-			duration : 1,
+			duration : 1/10000,
 			callback : function() {
 				squareToRemove.remove();
 			}

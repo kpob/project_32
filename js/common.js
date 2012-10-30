@@ -114,6 +114,11 @@ function makeMove(){
 	log("JSMove");
 	var fields = checkers.controler.getFields();
 	var moves = Moves.getMovesForBlack(fields);
+	log("moves length: "+moves.length);
+	for(m in moves){
+		log(m+") "+moves[m].from+"->"+moves[m].to);
+	}
+	log();
 	if(moves.length > 0){
 		var moveNr = Math.floor(Math.random()*moves.length);
 		var beatingList = [];
@@ -121,17 +126,20 @@ function makeMove(){
 			//z samymi biciami
 		var from = moves[moveNr].from;
 		var to = moves[moveNr].to;
-		Moves.moveBlack(fields, from, to, beatingList);
-		checkers.controler.view.moveFigure(from, to);
 		log("js: "+from+"->"+to);
-		naclModule.postMessage("move:"+from+","+to);			
+		//naclModule.postMessage("move:"+from+","+to);			
 		
-
 		if(moves[0].beating){
 			for(i in moves[moveNr].beating){
 				beatingList.push(moves[moveNr].beating[i].beat);
 			}
 		}
+		Moves.moveBlack(fields, from, to, beatingList);
+		for(i in beatingList){
+			checkers.controler.view.deleteFigure(beatingList[i]);
+		}
+		checkers.controler.view.moveFigure(from, to);
+
 		var movesForNacl = [];
 		if(moves[0].beating){
 			for(i in moves[moveNr].beating){
@@ -143,9 +151,6 @@ function makeMove(){
 					});
 				}
 			}
-		}
-		for(i in beatingList){
-			checkers.controler.view.deleteFigure(beatingList[i]);
 		}
 
 		for(j in movesForNacl)
