@@ -168,9 +168,9 @@ View.prototype = {
 
 	getFigure : function(position) {
 		var list = this.figuresList;
-		log("szukana: "+position);
-		for (j in list)
-			log(j+") "+list[j].position);	
+//		log("szukana: "+position);
+//		for (j in list)
+//			log(j+") "+list[j].position);	
 		for (i in list) {
 			if (list[i].position == position) {
 				return list[i];

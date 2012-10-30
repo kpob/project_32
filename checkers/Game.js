@@ -37,13 +37,13 @@ Checkers.prototype = {
 
 	setJSPlayer : function (color, algorithmName){
 		if(color == "white"){
-			log("W");
+			//log("W");
 			var whitePlayer = new Player();
 			whitePlayer.setAI(new RandomAI());
 			whitePlayer.setColor("white");
 			this.controler.setWhitePlayer(whitePlayer);
 		}else{
-			log("B");
+			//log("B");
 			var blackPlayer = new Player();
 			blackPlayer.setColor("black");
 			blackPlayer.setAI(new RandomAI());

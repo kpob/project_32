@@ -22,6 +22,6 @@ int Random::compute(GameState *gs, int depth){
 
 void Random::pickState(){
 	std::vector<GameState *> next = nextStates(Game::getInstance().state());
-	int random = rand() % next.size();
-	Game::getInstance().updateState(next.at(random));
+	//int random = rand() % next.size();
+	Game::getInstance().updateState(next.at(0));
 }

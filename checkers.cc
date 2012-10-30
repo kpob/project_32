@@ -121,23 +121,24 @@ void CheckersInstance::makeNaclMove(){
 	std::stringstream ss;
 	ss << moveMethodId;	
 	Game::getInstance().currentPlayer()->nextMove();
+	
 	uint32_t move = Game::getInstance().lastMoveBitboard();
 	for(int i=0; i<32;i++){
-		if((move & Game::getInstance().prevState()->whites()) & (1<<i))
+		if((move & Game::getInstance().prevState()->whites()) & (1<<i)){
 			ss << i << ",";
+		}
 	}
 	for(int i=0; i<32;i++){
-		if((move & Game::getInstance().state()->whites()) & (1<<i))
+		if((move & Game::getInstance().state()->whites()) & (1<<i)){
 			ss << i << ",";
+		}
 	}
-	
 //	helper::bitboard2stream(ss, move);
 	Game::getInstance().state()->tooglePlayer();
 	uint32_t opponentPawnsDiff = Game::getInstance().opponentPawnsDiffBitboard();
 	helper::bitboard2stream(ss, opponentPawnsDiff);
 	
 	size_t lastComma = ss.str().find_last_of(argsSeparator);
-
 	PostMessage(pp::Var(ss.str().substr(0, lastComma)));
 	sendMovePrompt();
 }

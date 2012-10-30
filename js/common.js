@@ -56,18 +56,18 @@ function handleMessage(message_event) {
 		else if(msg.startsWith("jsMove")){
 			if(!stop)
 				setTimeout(function(){
-					log("timeout js");
+				//	log("timeout js");
 					makeMove();
 				}, 2000);
 		}
 		else if(msg.startsWith("move")){
 			setTimeout(function(){
-				log("timeout nacl");
+			//	log("timeout nacl");
 				makeNaClMove(msg.split(':')[1]);
 			}, 1000);
 		}
 		else{
-			log("log: "+msg);
+			log("log:\n"+msg);
 		}
 	}
 
@@ -111,14 +111,14 @@ function sendNewGameToNaCl(){
 }
 
 function makeMove(){
-	log("JSMove");
+//	log("JSMove");
 	var fields = checkers.controler.getFields();
 	var moves = Moves.getMovesForBlack(fields);
-	log("moves length: "+moves.length);
-	for(m in moves){
-		log(m+") "+moves[m].from+"->"+moves[m].to);
-	}
-	log();
+	//log("moves length: "+moves.length);
+//	for(m in moves){
+//		log(m+") "+moves[m].from+"->"+moves[m].to);
+//	}
+//	log();
 	if(moves.length > 0){
 		var moveNr = Math.floor(Math.random()*moves.length);
 		var beatingList = [];
@@ -151,15 +151,20 @@ function makeMove(){
 					});
 				}
 			}
+		}else{
+			movesForNacl.push({
+						f : from,
+						t : to
+					});
 		}
-
-		for(j in movesForNacl)
-			log("beat: "+movesForNacl[j].f+"->"+movesForNacl[j].t);	
-
+//		for(j in movesForNacl)
+//			log("beat: "+movesForNacl[j].f+"->"+movesForNacl[j].t);	
+		
 		for(j in movesForNacl){
-			
 			naclModule.postMessage("move:"+movesForNacl[j].f+","+movesForNacl[j].t);	
 		}
+
+		
 /*
 		
 				if(i == 0){
@@ -193,8 +198,7 @@ function makeNaClMove(move){
 	var to = parseInt(move[1]);	
 	
 	var beatingList = [];
-	Moves.moveWhite(fields, from, to, beatingList);
-	checkers.controler.view.moveFigure(from, to);
+	
 	naclModule.postMessage("printBoard");
 	for(var i = 2; i<move.length; i++)
 		beatingList.push(parseInt(move[i]));
@@ -202,6 +206,9 @@ function makeNaClMove(move){
 	for(i in beatingList){
 		checkers.controler.view.deleteFigure(beatingList[i]);
 	}
+Moves.moveWhite(fields, from, to, beatingList);
+	checkers.controler.view.moveFigure(from, to);
+
 
 			
 }
