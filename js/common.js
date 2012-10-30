@@ -126,18 +126,37 @@ function makeMove(){
 		log("js: "+from+"->"+to);
 		naclModule.postMessage("move:"+from+","+to);			
 		
-/*
+
 		if(moves[0].beating){
 			for(i in moves[moveNr].beating){
 				beatingList.push(moves[moveNr].beating[i].beat);
 			}
 		}
-		
+		var movesForNacl = [];
+		if(moves[0].beating){
+			for(i in moves[moveNr].beating){
+				var beat = moves[moveNr].beating[i];
+				if(i == 0){
+					movesForNacl.push({
+						f : from,
+						t : beat.end
+					});
+				}
+			}
+		}
 		for(i in beatingList){
 			checkers.controler.view.deleteFigure(beatingList[i]);
 		}
-		if(moves[0].beating){
-			for(i in moves[moveNr].beating){
+
+		for(j in movesForNacl)
+			log("beat: "+movesForNacl[j].f+"->"+movesForNacl[j].t);	
+
+		for(j in movesForNacl){
+			
+			naclModule.postMessage("move:"+movesForNacl[j].f+","+movesForNacl[j].t);	
+		}
+/*
+		
 				if(i == 0){
 					var end = moves[moveNr].beating[i].end;
 					naclModule.postMessage("move:"+from+","+end);				
@@ -172,13 +191,13 @@ function makeNaClMove(move){
 	Moves.moveWhite(fields, from, to, beatingList);
 	checkers.controler.view.moveFigure(from, to);
 	naclModule.postMessage("printBoard");
-/*	for(var i = 2; i<move.length; i++)
+	for(var i = 2; i<move.length; i++)
 		beatingList.push(parseInt(move[i]));
 	
 	for(i in beatingList){
 		checkers.controler.view.deleteFigure(beatingList[i]);
 	}
-*/
+
 			
 }
 
