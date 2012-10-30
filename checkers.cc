@@ -112,11 +112,19 @@ void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesV
 
 void CheckersInstance::makeNaclMove(){
 	std::stringstream ss;
-	ss << moveMethodId;	
+	ss << "move:";	
 	Game::getInstance().currentPlayer()->nextMove();
 	uint32_t move = Game::getInstance().lastMoveBitboard();
-	helper::bitboard2stream(ss, move);
-	PostMessage(pp::Var("ddd"));
+	for(int i=0; i<32;i++){
+		if((move & Game::getInstance().prevState()->whites()) & (1<<i))
+			ss << i << ",";
+	}
+	for(int i=0; i<32;i++){
+		if((move & Game::getInstance().state()->whites()) & (1<<i))
+			ss << i << ",";
+	}
+	
+//	helper::bitboard2stream(ss, move);
 	Game::getInstance().state()->tooglePlayer();
 	uint32_t opponentPawnsDiff = Game::getInstance().opponentPawnsDiffBitboard();
 	helper::bitboard2stream(ss, opponentPawnsDiff);
