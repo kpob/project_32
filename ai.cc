@@ -87,11 +87,10 @@ void AI::nextJumps(GameState *gs, int from, std::vector<GameState*> &v) {
 		if(next){
 			next->setPlayer(player);
 			jumps++;
-			if(next->queens(player) == gs->queens(player)){ //todo: POWINNY BYC DAMKI DANEGO KOLORU
-				nextJumps(next,from+jumpDirections[i], v);
-			}else{ //jesli stal sie damka - koniec ruchu
+			if(!(gs->queens() & (1 << from)) && (next->queens() & (1<<to)))
 				v.push_back(next);
-			}
+			else
+				nextJumps(next,from+jumpDirections[i], v);
 		}
 	
 	}

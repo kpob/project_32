@@ -175,13 +175,13 @@ bool MoveGen::isLegalBlackJump(GameState *state, BITBOARD position, int directio
 	BITBOARD whites = state->whites();
 	switch (direction) {
 	case UP_LEFT:
-		return ((upLeft(position) & whites) && isEmpty(state, (position << 7)) && (position != 0x10 && position != 0x1000 && position != 0x100000 && position != 0x10000000)
+		return ((upLeft(position) & whites) && isEmpty(state, (position << 7)) && ((position & 0x10101010) == 0)
 				&& isQueen(state, position));
 	case UP_RIGHT:
-		return ((upRight(position) & whites) && isEmpty(state, (position << 9)) && (position != 0x80 && position != 0x000 && position != 0x800000 && position != 0x80000000)
+		return ((upRight(position) & whites) && isEmpty(state, (position << 9)) && ((position & 0x80808080) == 0)
 				&& isQueen(state, position));
 	case DOWN_LEFT:
-		return ((downLeft(position) & whites) && isEmpty(state, (position >> 9)) && (position != 0x10 && position != 0x1000 && position != 0x100000 && position != 0x10000000));
+		return ((downLeft(position) & whites) && isEmpty(state, (position >> 9)) && ((position & 0x10101010) == 0));
 	case DOWN_RIGHT:
 		return ((downRight(position) & whites) && isEmpty(state, (position >> 7))&& ((position & 0x88888888) == 0));
 	default:
