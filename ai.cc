@@ -7,7 +7,9 @@
 
 #include "include/ai.h"
 #include "include/game_state.h"
+#include "include/game.h"
 #include <vector>
+#include <iostream>
 
 AI::AI(){
 	jumpDirections[0] = UP_LEFT;
@@ -39,11 +41,12 @@ std::vector<GameState*> AI::nextStates(GameState *gs) {
 			if ((gs->blacks() & (1 << i)) == 0)
 				continue;
 		}
-
 		if (generator.getJumpers(gs) == 0)
 			nextMoves(gs, i, v);
-		else
+		else{
+			std::cout << i <<  " o" << std::endl;
 			nextJumps(gs,i, v);
+		}
 	}
 	return (v);
 }
@@ -76,16 +79,17 @@ void AI::nextJumps(GameState *gs, int from, std::vector<GameState*> &v) {
 	for(int i=0; i<4; i++){
 		next = generator.jump(gs, from, from+jumpDirections[i], false);
 		if(next){
+			next->setPlayer(gs->player());
 			jumps++;
 			if(next->queens() == gs->queens()) //todo: POWINNY BYC DAMKI DANEGO KOLORU
 				nextJumps(next,from+jumpDirections[i], v);
 			else{ //jesli stal sie damka - koniec ruchu
-				next->tooglePlayer();
+				//next->tooglePlayer();
 				v.push_back(next);
 			}
 		}
 	}
-	if(jumps==0)
+	if(jumps==0 && gs != Game::getInstance().state())
 		v.push_back(gs);
 }
 
@@ -114,4 +118,5 @@ int AI::reward(GameState *s, int player) {
 	}
 	return (result);
 }
+
 
