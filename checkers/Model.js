@@ -17,11 +17,11 @@ Model.prototype = {
 //		this.setFields("black", [12, 14]);
 //		this.setFields("white", [17, 19]);
 
-//		this.setFields("black", [10,18]);
-//		this.setFields("white", [6]);
+//		this.setFields("black", [21,28]);
+//		this.setFields("white", [18]);
 
-		this.setFields("black", [ 31, 30, 29, 28, 27, 26,25,24 ]);
-		this.setFields("white", [ 0, 1, 2, 3, 4, 5,6, 7]);
+		this.setFields("black", [ 31, 30, 29, 28, 27,26,25,24,23,22,21,20 ]);
+		this.setFields("white", [ 0, 1, 2, 3, 4,5,6,7,8,9,10,11]);
 //		this.setFields("black", [ 27, 26 ]);
 //		this.setFields("white", [ 8, 9, 10]);
 //		this.fields[12].setQueen();

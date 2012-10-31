@@ -175,10 +175,10 @@ bool MoveGen::isLegalBlackJump(GameState *state, BITBOARD position, int directio
 	BITBOARD whites = state->whites();
 	switch (direction) {
 	case UP_LEFT:
-		return ((upLeft(position) & whites) && isEmpty(state, (position << 7) && (position != 0x10 && position != 0x1000 && position != 0x100000 && position != 0x10000000))
+		return ((upLeft(position) & whites) && isEmpty(state, (position << 7)) && (position != 0x10 && position != 0x1000 && position != 0x100000 && position != 0x10000000)
 				&& isQueen(state, position));
 	case UP_RIGHT:
-		return ((upRight(position) & whites) && isEmpty(state, (position << 9) && (position != 0x80 && position != 0x000 && position != 0x800000 && position != 0x80000000))
+		return ((upRight(position) & whites) && isEmpty(state, (position << 9)) && (position != 0x80 && position != 0x000 && position != 0x800000 && position != 0x80000000)
 				&& isQueen(state, position));
 	case DOWN_LEFT:
 		return ((downLeft(position) & whites) && isEmpty(state, (position >> 9)) && (position != 0x10 && position != 0x1000 && position != 0x100000 && position != 0x10000000));
@@ -215,6 +215,8 @@ GameState *MoveGen::blackJump(GameState *state, BITBOARD position, int direction
 		break;
 	}
 	whites ^= move;
+	if(move & queens)
+		queens ^= move; //sasa
 	blacks ^= position; 		//zdejmij czarny ze starej pozycji
 	blacks ^= targetPosition; 	//postaw czarny
 	if (((targetPosition & blackLastLine)) && !isQueen(state, position))
@@ -273,6 +275,8 @@ GameState *MoveGen::whiteJump(GameState *state, BITBOARD position, int direction
 	}
 
 	blacks ^= move;
+	if(move & queens)
+		queens ^= move; //sasa
 	whites ^= position; 		//zdejmij czarny ze starej pozycji
 	whites ^= targetPosition;	//postaw czarny
 

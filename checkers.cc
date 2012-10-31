@@ -105,13 +105,7 @@ void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesV
 	for(unsigned i=0; i<movesVector.size(); i+=2){
 		int from = atoi(movesVector.at(i).c_str());
 		int to = atoi(movesVector.at(i+1).c_str());
-//		PostMessage(pp::Var(movesVector.at(i)));
-//		PostMessage(pp::Var(" "));
-//		PostMessage(pp::Var(movesVector.at(i+1)));
-//		PostMessage(pp::Var("\n"));
-//		std::stringstream ss;
-//		ss << movesVector.size();
-//		PostMessage(pp::Var(ss.str()));
+
 		MoveGen::getInstance().nextMove(from, to);
 	}
 	Game::getInstance().state()->tooglePlayer();

@@ -73,24 +73,31 @@ void AI::nextMoves(GameState *gs, int from, std::vector<GameState*> &v) {
  */
 
 void AI::nextJumps(GameState *gs, int from, std::vector<GameState*> &v) {
-	MoveGen &generator = MoveGen::getInstance();
-	GameState *next;
+
+	GameState *next = 0;
+	int player = gs->player();
 	int jumps = 0;
+	int to;
 	for(int i=0; i<4; i++){
-		next = generator.jump(gs, from, from+jumpDirections[i], false);
+		to = from+jumpDirections[i];
+		if(to <= 31 && to >= 0)
+			next = MoveGen::getInstance().jump(gs, from, from+jumpDirections[i], false);
+		else
+			continue;
 		if(next){
-			next->setPlayer(gs->player());
+			next->setPlayer(player);
 			jumps++;
-			if(next->queens() == gs->queens()) //todo: POWINNY BYC DAMKI DANEGO KOLORU
+			if(next->queens(player) == gs->queens(player)){ //todo: POWINNY BYC DAMKI DANEGO KOLORU
 				nextJumps(next,from+jumpDirections[i], v);
-			else{ //jesli stal sie damka - koniec ruchu
-				//next->tooglePlayer();
+			}else{ //jesli stal sie damka - koniec ruchu
 				v.push_back(next);
 			}
 		}
+	
 	}
-	if(jumps==0 && gs != Game::getInstance().state())
+	if(jumps==0 && gs != Game::getInstance().state()){
 		v.push_back(gs);
+	}
 }
 
 int AI::reward(GameState *s, int player) {
