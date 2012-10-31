@@ -58,13 +58,13 @@ function handleMessage(message_event) {
 				setTimeout(function(){
 				//	log("timeout js");
 					makeMove();
-				}, 2000);
+				}, 400);
 		}
 		else if(msg.startsWith("move")){
 			setTimeout(function(){
 			//	log("timeout nacl");
 				makeNaClMove(msg.split(':')[1]);
-			}, 1000);
+			}, 200);
 		}
 		else{
 			log("log:\n"+msg);
@@ -158,17 +158,19 @@ function makeMove(){
 					});
 				}
 			}
+
+			var move = "move:"+movesForNacl[0].f+","+movesForNacl[0].t;
+			for(var s=1; s<movesForNacl.length; s++){
+				move = move + ","+movesForNacl[s].f+","+movesForNacl[s].t;
+			}
+			log(move);
+			naclModule.postMessage(move);				
 		}else{
 			movesForNacl.push({
 						f : from,
 						t : to
 					});
-		}
-		for(j in movesForNacl)
-			log("move to nacl: "+movesForNacl[j].f+"->"+movesForNacl[j].t);	
-		j = 0;
-		for(j in movesForNacl){
-			naclModule.postMessage("move:"+movesForNacl[j].f+","+movesForNacl[j].t);	
+			naclModule.postMessage("move:"+from+","+to);	
 		}
 
 	}
