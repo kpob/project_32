@@ -150,6 +150,12 @@ function makeMove(){
 						f : from,
 						t : beat.end
 					});
+				}else{
+					var beatPrev = moves[moveNr].beating[i-1];
+					movesForNacl.push({
+						f : beatPrev.end,
+						t : beat.end
+					});
 				}
 			}
 		}else{
@@ -158,38 +164,16 @@ function makeMove(){
 						t : to
 					});
 		}
-//		for(j in movesForNacl)
-//			log("beat: "+movesForNacl[j].f+"->"+movesForNacl[j].t);	
-		
+		for(j in movesForNacl)
+			log("move to nacl: "+movesForNacl[j].f+"->"+movesForNacl[j].t);	
+		j = 0;
 		for(j in movesForNacl){
 			naclModule.postMessage("move:"+movesForNacl[j].f+","+movesForNacl[j].t);	
 		}
 
-		
-/*
-		
-				if(i == 0){
-					var end = moves[moveNr].beating[i].end;
-					naclModule.postMessage("move:"+from+","+end);				
-				}else{
-					var prevEnd = moves[moveNr].beating[i-1].end;
-					naclModule.postMessage("move:"+prevEnd+","+end);
-				}
-			}
-			naclModule.postMessage("move:"+moves[moveNr].beating[moves[moveNr].beating.length-1]+","+to);
-		}else{
-			naclModule.postMessage("move:"+from+","+to);			
-		}
-
-		
-		naclModule.postMessage("move:"+from+","+moves[moveNr].to);
-		//log("jsmove:"+moves[moveNr].from+","+moves[moveNr].to);
-*/
 	}
-	// zrobić ruch swoim playerem i go wysłać do NaCl i na view.
-//	naclModule.postMessage("move:22,18");
-	// checkers.view.moveFigure(23, 19);
 }
+
 var stop = false;
 function makeNaClMove(move){
 	move = move.split(',');
@@ -204,14 +188,12 @@ function makeNaClMove(move){
 	for(var i = 2; i<move.length; i++)
 		beatingList.push(parseInt(move[i]));
 	
+	Moves.moveWhite(fields, from, to, beatingList);
+
 	for(i in beatingList){
 		checkers.controler.view.deleteFigure(beatingList[i]);
-	}
-Moves.moveWhite(fields, from, to, beatingList);
+	}	
 	checkers.controler.view.moveFigure(from, to);
-
-
-			
 }
 
 
