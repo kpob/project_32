@@ -368,9 +368,9 @@ BITBOARD MoveGen::getJumpers(GameState *state) {
 	if (playerQueens) {
 		temp = (nOcc << 4) & opponent;
 		if (temp)
-			movers |= (((temp & left3_5mask) << 3) | ((temp & right5_3mask) << 5)) & player;
+			movers |= (((temp & left3_5mask) << 3) | ((temp & right5_3mask) << 5)) & playerQueens;
 		temp = (((nOcc & left3_5mask) << 3) | ((nOcc & right5_3mask) << 5)) & opponent;
-		movers |= (temp << 4) & player;
+		movers |= (temp << 4) & playerQueens;
 	}
 
 	if (state->player() == black)
