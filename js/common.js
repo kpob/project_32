@@ -58,13 +58,21 @@ function handleMessage(message_event) {
 				setTimeout(function(){
 				//	log("timeout js");
 					makeMove();
-				}, 400);
+				}, 2000);
 		}
 		else if(msg.startsWith("move")){
 			setTimeout(function(){
 			//	log("timeout nacl");
 				makeNaClMove(msg.split(':')[1]);
-			}, 200);
+			}, 1000);
+		}
+		else if(msg.startsWith("board")){
+			var board = msg.split(':')[1];
+			var lines = board.split('\n');
+			for(var l=0; l<8; l++){
+				var elems = lines[l].split(' ').reverse().join(' ');
+				log(elems);
+			}
 		}
 		else{
 			log("log:\n"+msg);

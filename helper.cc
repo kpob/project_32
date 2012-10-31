@@ -27,6 +27,7 @@ BITBOARD shift(int i) {
 
 std::string printBoard(GameState *state) {
 	std::stringstream stream;
+	stream << "board:";
 	for (int i = 63; i >= 0; i--) {
 		if (i % 8 == 7 && i != 63) {
 			stream << "\n";
