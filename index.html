@@ -45,7 +45,7 @@
 
   <div id="container"></div>
   <div id="panel">
-    <textarea id="logField" name="logField" rows="25" cols="40"></textarea>
+    <textarea id="logField" name="logField" rows="25" cols="45"></textarea>
     <div/>
     <table>
     <button id="fortyTwoButton" onclick="sendNewGameToNaCl()">New Game</button>
@@ -53,6 +53,7 @@
     <button id="reverseTextButton" onclick="clearLog()">Clear Log</button>
 	<button id="setPlayers" onclick="setPlayersToNaCl()">Set Players</button>
 <button id="stop" onclick="stop = true;">Stop</button>
+<button id="stop" onclick="setPlayersToNaCl(); sendNewGameToNaCl();">SetPlayers and New Game</button>	
     <table/>
   </div>
 </body>

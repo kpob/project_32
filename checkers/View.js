@@ -191,7 +191,7 @@ View.prototype = {
 		var squareToRemove = figuresList[counter];
 		squareToRemove.transitionTo({
 			opacity : 0,
-			duration : 1/10000,
+			duration : 1/10,
 			callback : function() {
 				squareToRemove.remove();
 			}
