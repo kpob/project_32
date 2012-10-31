@@ -102,13 +102,16 @@ void CheckersInstance::handleMove(const std::string& message){
 }
 
 void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesVector){
+	MoveGen &gen = MoveGen::getInstance();
 	for(unsigned i=0; i<movesVector.size(); i+=2){
 		int from = atoi(movesVector.at(i).c_str());
 		int to = atoi(movesVector.at(i+1).c_str());
 
-		MoveGen::getInstance().nextMove(from, to);
+		gen.nextMove(from, to);
 	}
 	Game::getInstance().state()->tooglePlayer();
+	if(!(gen.getJumpers(Game::getInstance().state()) || gen.getMovers(Game::getInstance().state())))	
+		PostMessage(pp::Var("endGame"));
 }
 
 void CheckersInstance::makeNaclMove(){
@@ -119,27 +122,25 @@ void CheckersInstance::makeNaclMove(){
 	Game::getInstance().currentPlayer()->nextMove();
 	
 	uint32_t move = Game::getInstance().lastMoveBitboard();
-	for(int i=0; i<32;i++){
-		if((move & Game::getInstance().prevState()->whites()) & (1<<i)){
+	for(int i=0; i<32;i++)
+		if((move & Game::getInstance().prevState()->whites()) & (1<<i))
 			ss << i << ",";
-		}
-	}
-	for(int i=0; i<32;i++){
-		if((move & Game::getInstance().state()->whites()) & (1<<i)){
+	for(int i=0; i<32;i++)
+		if((move & Game::getInstance().state()->whites()) & (1<<i))
 			ss << i << ",";
-		}
-	}
-//	helper::bitboard2stream(ss, move);
+	
 	Game::getInstance().state()->tooglePlayer();
 	uint32_t opponentPawnsDiff = Game::getInstance().opponentPawnsDiffBitboard();
 	helper::bitboard2stream(ss, opponentPawnsDiff);
 	
 	size_t lastComma = ss.str().find_last_of(argsSeparator);
-	if(lastComma != 0)
-		PostMessage(pp::Var(ss.str().substr(0, lastComma)));
+	PostMessage(pp::Var(ss.str().substr(0, lastComma)));
+
+	MoveGen &gen  = MoveGen::getInstance();
+	if(gen.getJumpers(Game::getInstance().state()) || gen.getMovers(Game::getInstance().state()))	
+		sendMovePrompt();
 	else
-		PostMessage(pp::Var("CHUJ"));
-	sendMovePrompt();
+		PostMessage(pp::Var("endGame"));
 }
 
 void CheckersInstance::sendMovePrompt(){

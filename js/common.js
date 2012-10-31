@@ -58,13 +58,13 @@ function handleMessage(message_event) {
 				setTimeout(function(){
 				//	log("timeout js");
 					makeMove();
-				}, 2000);
+				}, 500);
 		}
 		else if(msg.startsWith("move")){
 			setTimeout(function(){
 			//	log("timeout nacl");
 				makeNaClMove(msg.split(':')[1]);
-			}, 1000);
+			}, 250);
 		}
 		else if(msg.startsWith("board")){
 			var board = msg.split(':')[1];
@@ -73,6 +73,11 @@ function handleMessage(message_event) {
 				var elems = lines[l].split(' ').reverse().join(' ');
 				log(elems);
 			}
+		}else if(msg.startsWith('endGame')){
+			
+			setTimeout(function(){
+				alert('GAME OVER');
+			}, 1000);
 		}
 		else{
 			log("log:\n"+msg);
