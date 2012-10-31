@@ -32,7 +32,7 @@ Checkers.prototype = {
 
 		// inicjalizacja planszy
 		this.model.init();
-		this.view.drawPawns(this.model.fields);
+		//this.view.drawPawns(this.model.fields);
 	},
 
 	setJSPlayer : function (color, algorithmName){

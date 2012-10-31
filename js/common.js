@@ -56,13 +56,11 @@ function handleMessage(message_event) {
 		else if(msg.startsWith("jsMove")){
 			if(!stop)
 				setTimeout(function(){
-				//	log("timeout js");
 					makeMove();
 				}, 500);
 		}
 		else if(msg.startsWith("move")){
 			setTimeout(function(){
-			//	log("timeout nacl");
 				makeNaClMove(msg.split(':')[1]);
 			}, 250);
 		}
@@ -74,7 +72,6 @@ function handleMessage(message_event) {
 				log(elems);
 			}
 		}else if(msg.startsWith('endGame')){
-			
 			setTimeout(function(){
 				alert('GAME OVER');
 			}, 1000);
@@ -120,19 +117,15 @@ function setPlayersToNaCl(){
 }
 
 function sendNewGameToNaCl(){
-	 naclModule.postMessage('newGame');
+	checkers.controler.model.setNewGame();
+	checkers.controler.view.drawPawns(checkers.controler.model.fields);
+	naclModule.postMessage('newGame');
 	log("js: newGame");
 }
 
 function makeMove(){
-//	log("JSMove");
 	var fields = checkers.controler.getFields();
 	var moves = Moves.getMovesForBlack(fields);
-	//log("moves length: "+moves.length);
-//	for(m in moves){
-//		log(m+") "+moves[m].from+"->"+moves[m].to);
-//	}
-//	log();
 	if(moves.length > 0){
 		var moveNr = Math.floor(Math.random()*moves.length);
 		var beatingList = [];
@@ -141,7 +134,6 @@ function makeMove(){
 		var from = moves[moveNr].from;
 		var to = moves[moveNr].to;
 		log("js: "+from+"->"+to);
-		//naclModule.postMessage("move:"+from+","+to);			
 		
 		if(moves[0].beating){
 			for(i in moves[moveNr].beating){

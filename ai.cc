@@ -9,7 +9,6 @@
 #include "include/game_state.h"
 #include "include/game.h"
 #include <vector>
-#include <iostream>
 
 AI::AI(){
 	jumpDirections[0] = UP_LEFT;
@@ -43,10 +42,8 @@ std::vector<GameState*> AI::nextStates(GameState *gs) {
 		}
 		if (generator.getJumpers(gs) == 0)
 			nextMoves(gs, i, v);
-		else{
-			std::cout << i <<  " o" << std::endl;
+		else
 			nextJumps(gs,i, v);
-		}
 	}
 	return (v);
 }
@@ -57,12 +54,12 @@ std::vector<GameState*> AI::nextStates(GameState *gs) {
 
 void AI::nextMoves(GameState *gs, int from, std::vector<GameState*> &v) {
 	MoveGen &generator = MoveGen::getInstance();
-	GameState *next;
+	GameState *next = 0;
 	for(int i=0; i<6; i++){
-		next = generator.move(gs, from, from + moveDirections[i], false);
+		if(from+moveDirections[i] >= 0)
+			next = generator.move(gs, from, from + moveDirections[i], false);
 		if (next){
 			next->setPlayer(gs->player());
-			next->tooglePlayer();
 			v.push_back(next);
 		}
 	}
@@ -87,16 +84,15 @@ void AI::nextJumps(GameState *gs, int from, std::vector<GameState*> &v) {
 		if(next){
 			next->setPlayer(player);
 			jumps++;
-			if(!(gs->queens() & (1 << from)) && (next->queens() & (1<<to)))
+			if(!(gs->queens() & (1 << from)) && (next->queens() & (1<<to))) // jesli nowa damka to koniec ruchu
 				v.push_back(next);
 			else
 				nextJumps(next,from+jumpDirections[i], v);
 		}
 	
 	}
-	if(jumps==0 && gs != Game::getInstance().state()){
+	if(jumps==0 && gs != Game::getInstance().state())
 		v.push_back(gs);
-	}
 }
 
 int AI::reward(GameState *s, int player) {

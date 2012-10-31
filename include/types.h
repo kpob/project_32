@@ -40,5 +40,8 @@ const BITBOARD left4mask = 0xf0f0f0f0;
 const BITBOARD right5_3mask = 0x70707070;
 const BITBOARD right4mask = 0x0f0f0f0f;
 
+const BITBOARD leftEdge = 0x11111111;
+const BITBOARD rightEdge = 0x88888888;
+
 
 #endif /* TYPES_H_ */

@@ -13,7 +13,7 @@
 class Player{
 private:
 
-	AI *algoritihm;
+	AI *algorithm;
 	int color;
 	std::string language;
 

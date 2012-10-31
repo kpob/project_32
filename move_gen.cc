@@ -7,10 +7,10 @@
 
 #include "include/move_gen.h"
 #include "include/helper.h"
-#include <stdint.h>
-#include <iostream>
 #include "include/game.h"
 #include "include/game_state.h"
+
+#include <stdint.h>
 
 MoveGen::MoveGen(){
 }
@@ -46,7 +46,6 @@ GameState *MoveGen::move(GameState *gs, const int from, const int to, bool isRea
 	BITBOARD whites = gs->whites();
 	BITBOARD blacks = gs->blacks();
 	BITBOARD queens = gs->queens();
-	int player = gs->player();
 	GameState *newState = 0;
 
 	int diff = to - from;
@@ -73,7 +72,7 @@ GameState *MoveGen::move(GameState *gs, const int from, const int to, bool isRea
 	}
 
 	if (isEmpty(gs, moveResult) && moveResult) {
-		if (player == white)
+		if (gs->player() == white)
 			whites ^= position | moveResult;
 		else
 			blacks ^= position | moveResult;
@@ -87,21 +86,7 @@ GameState *MoveGen::move(GameState *gs, const int from, const int to, bool isRea
 
 	if (isReal && moveResult)
 		Game::getInstance().updateState(newState);
-
-
 	return (newState);
-}
-
-bool MoveGen::isBlackPawn(GameState *state, BITBOARD position) {
-	return ((state->blacks() & ~state->queens() & position) && state->player() == black);
-}
-
-bool MoveGen::isWhitePawn(GameState *state, BITBOARD position) {
-	return ((state->whites() & ~state->queens() & position) && state->player() == white);
-}
-
-bool MoveGen::isQueen(GameState *state, BITBOARD position) {
-	return (state->queens() & position);
 }
 
 GameState *MoveGen::jump(GameState *state, const int fieldNumber, const int to, bool isReal) {
@@ -132,6 +117,7 @@ GameState *MoveGen::jump(GameState *state, const int fieldNumber, const int to, 
 
 /*
  *  Poniższe fukcje zwracają nowe pozycje po atakach we wszystkich kierunkach
+ *	lub 0 jesli nie mozna wykonac skoku
  */
 
 GameState *MoveGen::jumpUpLeft(GameState *state, BITBOARD position) {
@@ -175,15 +161,17 @@ bool MoveGen::isLegalBlackJump(GameState *state, BITBOARD position, int directio
 	BITBOARD whites = state->whites();
 	switch (direction) {
 	case UP_LEFT:
-		return ((upLeft(position) & whites) && isEmpty(state, (position << 7)) && ((position & 0x10101010) == 0)
-				&& isQueen(state, position));
+		if(position & leftEdge) return (false);
+		return ((upLeft(position) & whites) && isEmpty(state, (position << 7)) && isQueen(state, position));
 	case UP_RIGHT:
-		return ((upRight(position) & whites) && isEmpty(state, (position << 9)) && ((position & 0x80808080) == 0)
-				&& isQueen(state, position));
+		if(position & rightEdge) return (false);
+		return ((upRight(position) & whites) && isEmpty(state, (position << 9)) && isQueen(state, position));
 	case DOWN_LEFT:
-		return ((downLeft(position) & whites) && isEmpty(state, (position >> 9)) && ((position & 0x10101010) == 0));
+		if(position & leftEdge) return (false);
+		return ((downLeft(position) & whites) && isEmpty(state, (position >> 9)) );
 	case DOWN_RIGHT:
-		return ((downRight(position) & whites) && isEmpty(state, (position >> 7))&& ((position & 0x88888888) == 0));
+		if(position & rightEdge) return (false);
+		return ((downRight(position) & whites) && isEmpty(state, (position >> 7)));
 	default:
 		return (false);
 	}
@@ -216,7 +204,7 @@ GameState *MoveGen::blackJump(GameState *state, BITBOARD position, int direction
 	}
 	whites ^= move;
 	if(move & queens)
-		queens ^= move; //sasa
+		queens ^= move; 		//bicie damki
 	blacks ^= position; 		//zdejmij czarny ze starej pozycji
 	blacks ^= targetPosition; 	//postaw czarny
 	if (((targetPosition & blackLastLine)) && !isQueen(state, position))
@@ -230,18 +218,21 @@ GameState *MoveGen::blackJump(GameState *state, BITBOARD position, int direction
  * 	WHITE JUMPS
  */
 
-bool MoveGen::isLegalWhiteJump(GameState *state, BITBOARD position,
-		int direction) {
+bool MoveGen::isLegalWhiteJump(GameState *state, BITBOARD position, int direction) {
 	BITBOARD blacks = state->blacks();
 	switch (direction) {
 	case UP_LEFT:
-		return ((upLeft(position) & blacks) && isEmpty(state, (position << 7)) && ((position & 0x11111111) == 0));
+		if(position & leftEdge) return (false);
+		return ((upLeft(position) & blacks) && isEmpty(state, (position << 7)));
 	case UP_RIGHT:
-		return ((upRight(position) & blacks) && isEmpty(state, (position << 9)) && ((position & 0x88888888) == 0));
+		if(position & rightEdge) return (false);
+		return ((upRight(position) & blacks) && isEmpty(state, (position << 9)));
 	case DOWN_LEFT:
-		return ((downLeft(position) & blacks) && isEmpty(state, (position >> 9)) && isQueen(state, position) && ((position & 0x11111111) == 0));
+		if(position & leftEdge) return (false);
+		return ((downLeft(position) & blacks) && isEmpty(state, (position >> 9)) && isQueen(state, position));
 	case DOWN_RIGHT:
-		return ((downRight(position) & blacks) && isEmpty(state, (position >> 7)) && isQueen(state, position) && ((position & 0x88888888) == 0));
+		if(position & rightEdge) return (false);
+		return ((downRight(position) & blacks) && isEmpty(state, (position >> 7)) && isQueen(state, position));
 	default:
 		return (false);
 	}
@@ -276,7 +267,7 @@ GameState *MoveGen::whiteJump(GameState *state, BITBOARD position, int direction
 
 	blacks ^= move;
 	if(move & queens)
-		queens ^= move; //sasa
+		queens ^= move; 		//bicie damki
 	whites ^= position; 		//zdejmij czarny ze starej pozycji
 	whites ^= targetPosition;	//postaw czarny
 
@@ -304,22 +295,22 @@ BITBOARD MoveGen::getMovers(GameState *state) {
 		player = whites;
 		opponent = blacks;
 		playerQueens = player & queens;
-	} else {
+	} else { //dla uproszczenia odwracamy plansze i postepujemy jak z bialymi
 		opponent = helper::reverse(whites);
 		player = helper::reverse(blacks);
 		playerQueens = player & helper::reverse(queens);
 	}
 
-	const BITBOARD nOcc = ~(opponent | player);
+	const BITBOARD notOccupied = ~(opponent | player);
 
-	BITBOARD movers = (nOcc >> 4) & player;
-	movers |= ((nOcc & left3_5mask) >> 5) & player;
-	movers |= ((nOcc & right5_3mask) >> 3) & player;
+	BITBOARD movers = (notOccupied >> 4) & player;
+	movers |= ((notOccupied & left3_5mask) >> 5) & player;
+	movers |= ((notOccupied & right5_3mask) >> 3) & player;
 
 	if (playerQueens) {
-		movers |= (nOcc << 4) & playerQueens;
-		movers |= ((nOcc & left3_5mask) << 5) & playerQueens;
-		movers |= ((nOcc & right5_3mask) << 3) & playerQueens;
+		movers |= (notOccupied << 4) & playerQueens;
+		movers |= ((notOccupied & left3_5mask) << 5) & playerQueens;
+		movers |= ((notOccupied & right5_3mask) << 3) & playerQueens;
 	}
 
 	if (state->player() == black)
@@ -341,13 +332,13 @@ BITBOARD MoveGen::getJumpers(GameState *state) {
 		player = whites;
 		opponent = blacks;
 		playerQueens = player & queens;
-	} else {
+	} else { //dla uproszczenia odwracamy plansze i postepujemy jak z bialymi
 		opponent = helper::reverse(whites);
 		player = helper::reverse(blacks);
 		playerQueens = player & helper::reverse(queens);
 	}
 
-	const BITBOARD nOcc = ~(opponent | player);
+	const BITBOARD notOccupied = ~(opponent | player);
 	BITBOARD movers = 0;
 
 	//bicie w przód
@@ -358,18 +349,18 @@ BITBOARD MoveGen::getJumpers(GameState *state) {
 	//za przeciwnikiem, a przeciwnik o 4 pola od naszego piona
 	//bicie damek (czyli bicie do tyłu odbywa się analogicznie)
 
-	BITBOARD temp = (nOcc >> 4) & opponent;
+	BITBOARD temp = (notOccupied >> 4) & opponent;
 	if (temp)
 		movers |= (((temp & left3_5mask) >> 5) | ((temp & right5_3mask) >> 3)) & player;
-	temp = (((nOcc & left3_5mask) >> 5) | ((nOcc & right5_3mask) >> 3)) & opponent;
+	temp = (((notOccupied & left3_5mask) >> 5) | ((notOccupied & right5_3mask) >> 3)) & opponent;
 	movers |= (temp >> 4) & player;
 
 	//bicie w tył
 	if (playerQueens) {
-		temp = (nOcc << 4) & opponent;
+		temp = (notOccupied << 4) & opponent;
 		if (temp)
 			movers |= (((temp & left3_5mask) << 3) | ((temp & right5_3mask) << 5)) & playerQueens;
-		temp = (((nOcc & left3_5mask) << 3) | ((nOcc & right5_3mask) << 5)) & opponent;
+		temp = (((notOccupied & left3_5mask) << 3) | ((notOccupied & right5_3mask) << 5)) & opponent;
 		movers |= (temp << 4) & playerQueens;
 	}
 
@@ -379,6 +370,10 @@ BITBOARD MoveGen::getJumpers(GameState *state) {
 	return (movers);
 }
 
+/*
+*	MOVE
+*/
+
 void MoveGen::nextMove(int from, int to){
 	int diff = from - to;
 	if(diff >= -5 && diff <= 5)
@@ -386,5 +381,22 @@ void MoveGen::nextMove(int from, int to){
 	else if(diff < -5 || diff > 5)
 		jump(Game::getInstance().state(), from, to, true);
 }
+
+/*
+*	CHECKING FIELDS
+*/
+
+bool MoveGen::isBlackPawn(GameState *state, BITBOARD position) {
+	return ((state->blacks() & ~state->queens() & position) && state->player() == black);
+}
+
+bool MoveGen::isWhitePawn(GameState *state, BITBOARD position) {
+	return ((state->whites() & ~state->queens() & position) && state->player() == white);
+}
+
+bool MoveGen::isQueen(GameState *state, BITBOARD position) {
+	return (state->queens() & position);
+}
+
 
 
