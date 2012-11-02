@@ -1,9 +1,5 @@
 naclModule = null;  // Global application object.
-statusText = 'NO-STATUSES';
-
-String.prototype.startsWith = function(needle){
-    return(this.indexOf(needle) == 0);
-};
+statusText = '';
 
 function extractSearchParameter(name, def_value) {
   var nameIndex = window.location.search.indexOf(name + "=");
@@ -56,25 +52,23 @@ function handleMessage(message_event) {
 		else if(msg.startsWith("jsMove")){
 			if(!stop)
 				setTimeout(function(){
-					makeMove();
-				}, 500);
+					checkers.makeJsMove();
+				}, 1000);
 		}
 		else if(msg.startsWith("move")){
 			setTimeout(function(){
-				makeNaClMove(msg.split(':')[1]);
-			}, 250);
+				checkers.makeNaClMove(msg.split(':')[1]);
+			}, 500);
 		}
 		else if(msg.startsWith("board")){
 			var board = msg.split(':')[1];
 			var lines = board.split('\n');
 			for(var l=0; l<8; l++){
 				var elems = lines[l].split(' ').reverse().join(' ');
-				log(elems);
 			}
-		}else if(msg.startsWith('endGame')){
-			setTimeout(function(){
-				alert('GAME OVER');
-			}, 1000);
+		}
+		else if(msg.startsWith('endGame')){
+			log("endGameFromNaCl");
 		}
 		else{
 			log("log:\n"+msg);
@@ -101,9 +95,9 @@ function decodeSetPlayers(msg){
 	log("nacl: setPlayers");
 
 	if(player1.lang == "js")
-		checkers.setJSPlayer(player1.color, player1.algorithm);
+		checkers.setPlayer(player1.color, player1.algorithm);
 	if(player2.lang == "js")
-		checkers.setJSPlayer(player2.color, player2.algorithm);
+		checkers.setPlayer(player2.color, player2.algorithm);
 }
 
 function newGame(){
@@ -117,90 +111,18 @@ function setPlayersToNaCl(){
 }
 
 function sendNewGameToNaCl(){
-	checkers.controler.model.setNewGame();
-	checkers.controler.view.drawPawns(checkers.controler.model.fields);
+	checkers.initNewGame();
 	naclModule.postMessage('newGame');
 	log("js: newGame");
 }
-
-function makeMove(){
-	var fields = checkers.controler.getFields();
-	var moves = Moves.getMovesForBlack(fields);
-	if(moves.length > 0){
-		var moveNr = Math.floor(Math.random()*moves.length);
-		var beatingList = [];
-			//jeśli przynajmniej jednen ruch to bicie to mamy do czynienia
-			//z samymi biciami
-		var from = moves[moveNr].from;
-		var to = moves[moveNr].to;
-		log("js: "+from+"->"+to);
-		
-		if(moves[0].beating){
-			for(i in moves[moveNr].beating){
-				beatingList.push(moves[moveNr].beating[i].beat);
-			}
-		}
-		Moves.moveBlack(fields, from, to, beatingList);
-		for(i in beatingList){
-			checkers.controler.view.deleteFigure(beatingList[i]);
-		}
-		checkers.controler.view.moveFigure(from, to);
-
-		var movesForNacl = [];
-		if(moves[0].beating){
-			for(i in moves[moveNr].beating){
-				var beat = moves[moveNr].beating[i];
-				if(i == 0){
-					movesForNacl.push({
-						f : from,
-						t : beat.end
-					});
-				}else{
-					var beatPrev = moves[moveNr].beating[i-1];
-					movesForNacl.push({
-						f : beatPrev.end,
-						t : beat.end
-					});
-				}
-			}
-
-			var move = "move:"+movesForNacl[0].f+","+movesForNacl[0].t;
-			for(var s=1; s<movesForNacl.length; s++){
-				move = move + ","+movesForNacl[s].f+","+movesForNacl[s].t;
-			}
-			log(move);
-			naclModule.postMessage(move);				
-		}else{
-			movesForNacl.push({
-						f : from,
-						t : to
-					});
-			naclModule.postMessage("move:"+from+","+to);	
-		}
-
-	}
-}
-
 var stop = false;
-function makeNaClMove(move){
-	move = move.split(',');
-	log("NaClMove: "+move[0]+"->"+move[1]);
-	var fields = checkers.controler.getFields();
-	var from = parseInt(move[0]);
-	var to = parseInt(move[1]);	
-	
-	var beatingList = [];
-	
-	naclModule.postMessage("printBoard");
-	for(var i = 2; i<move.length; i++)
-		beatingList.push(parseInt(move[i]));
-	
-	Moves.moveWhite(fields, from, to, beatingList);
 
-	for(i in beatingList){
-		checkers.controler.view.deleteFigure(beatingList[i]);
-	}	
-	checkers.controler.view.moveFigure(from, to);
+function clearLog() {
+	var input = document.getElementById('logField');
+	input.innerHTML = "";
 }
 
+function printBoard(){
+	naclModule.postMessage('printBoard');
+}
 

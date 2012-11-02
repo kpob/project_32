@@ -70,3 +70,7 @@ function concat(arr1, arr2) {
 		arr1.push(arr2[i]);
 	return arr1;
 }
+
+String.prototype.startsWith = function(needle){
+    return(this.indexOf(needle) == 0);
+}

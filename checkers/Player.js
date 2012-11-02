@@ -1,16 +1,11 @@
 Player = function() {
-	this.controler = {};
+	this.delay = 300;
 	this.color = {};
-	this.speed = 300;
 	this.AI = {};
 };
 
 Player.prototype = {
-	setControler : function(controler) {
-		this.controler = controler;
-	},
 
-	// black or white
 	setColor : function(color) {
 		this.color = color;
 	},
@@ -19,60 +14,55 @@ Player.prototype = {
 		this.AI = AI;
 	},
 	
-	makeMove : function(){
-		var fields = this.controler.getFields();
-		var moves = this.getMoves(fields);
-		
-		if(moves.length > 0){
-			var moveNr = this.pickMove(fields, moves);
-			
-			var beatingList = [];
-			//jeśli przynajmniej jednen ruch to bicie to mamy do czynienia
-			//z samymi biciami
-			if(moves[0].beating){
-				for(i in moves[moveNr].beating){
-					beatingList.push(moves[moveNr].beating[i].beat);
+	makeMove : function(fields){
+		var move = this.AI.pickMove(fields, this.color);
+		if(move){
+			this.executeMove(fields, move);
+		}else{
+			log("Brak ruchów. GameOver");	
+		}
+	},
+
+	executeMove : function(fields, move){
+		var beatingList = [];
+		if(move.beating){
+			for(i in move.beating){
+				beatingList.push(move.beating[i].beat);
+			}
+		}
+		//poruszanie modelu
+		Moves.move(fields, move.from, move.to, beatingList, this.color);
+		//poruszanie view
+		for(i in beatingList){
+			checkers.view.deleteFigure(beatingList[i]);
+		}
+		checkers.view.moveFigure(move.from, move.to);
+
+		//ruch dla nacl
+		var movesForNacl = [];
+		if(move.beating){
+			for(j in move.beating){
+				var beat = move.beating[j];
+				if(j == 0){
+					movesForNacl.push({
+						f : move.from,
+						t : beat.end
+					});
+				}else{
+					var beatPrev = move.beating[j-1];
+					movesForNacl.push({
+						f : beatPrev.end,
+						t : beat.end
+					});
 				}
 			}
-			this.move(fields, moves[moveNr].from, moves[moveNr].to, beatingList);
-		} else {
-			this.win();
-		}
-	},
-	
-	getMoves : function(fields){
-		var moves;
-		if (this.color == "white") {
-			moves = Moves.getMovesForWhite(fields);
+			var moveText = "move:"+movesForNacl[0].f+","+movesForNacl[0].t;
+			for(var s=1; s<movesForNacl.length; s++){
+				moveText = moveText + ","+movesForNacl[s].f+","+movesForNacl[s].t;
+			}
+			naclModule.postMessage(moveText);
 		}else{
-			moves = Moves.getMovesForBlack(fields);
+			naclModule.postMessage("move:"+move.from+","+move.to);
 		}
-		return moves;
-	},
-	
-	move : function(fields, from, to, beatingList){
-		if (this.color == "white") {
-			Moves.moveWhite(fields, from, to, beatingList);
-		}else{
-			Moves.moveBlack(fields, from, to, beatingList);
-		}
-		this.controler.view.moveFigure(from, to);
-		for(i in beatingList){
-			this.controler.view.deleteFigure(beatingList[i]);
-		}
-	},
-	
-	win : function(){
-		if (this.color == "white") {
-			log("!!! BLACK WINS !!!");
-		}else{
-			log("!!! WHITE WINS !!!");
-		}	
-//		this.controler.model.listFields();
-	},
-	
-	pickMove : function(fields, moves){
-		var moveNr = this.AI.pickMove(fields, moves, this.color);
-		return moveNr;
 	}
 };

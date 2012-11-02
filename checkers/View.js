@@ -152,7 +152,7 @@ View.prototype = {
 			y : XY.y,
 			width: this.squareSize,
 			height : this.squareSize,
-			duration : 1 / 3,
+			duration : 1 / 10,
 			callback : function() {
 				if (figure.color == "white" && (figure.position == 31 || figure.position == 30
 						|| figure.position == 29 || figure.position == 28)) {
@@ -179,7 +179,7 @@ View.prototype = {
 	},
 
 	deleteFigure : function(position) {
-		log("to delete :"+position);
+//		log("to delete :"+position);
 		var figuresList = this.figuresList;
 		var counter = 0;
 		for (i in figuresList) {
@@ -206,5 +206,18 @@ View.prototype = {
 		for (i in list) {
 			log(list[i].position);
 		}
+	},
+
+	moveAndDelete : function(from, to, beatingList) {
+		if(beatingList.length == 0){
+			this.moveFigure(from, to);
+		}else{
+			for(i in beatingList){
+				if(i == 0){
+					
+				}
+			}
+		}
+
 	}
 };  	

@@ -2,9 +2,10 @@ RandomAI = function(){
 };
 
 RandomAI.prototype = {
-		pickMove : function(fields, possibleMoves, color){
-			var rand = Math.floor(Math.random()*possibleMoves.length);
-			return rand;
+		pickMove : function(fields, color){
+			var moves = Moves.getMoves(fields, color);
+			var rand = Math.floor(Math.random()*moves.length);
+			return moves[0];
 		},
 		
 		say : function(){

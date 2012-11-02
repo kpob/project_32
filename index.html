@@ -10,7 +10,6 @@
   <script type="text/javascript" src="libs/Kinetic.js"></script>
   <script type="text/javascript" src="libs/jquery.js"></script>
 
-  <script type="text/javascript" src="checkers/Controler.js"></script>
   <script type="text/javascript" src="checkers/Field.js"></script>
   <script type="text/javascript" src="checkers/Game.js"></script>
   <script type="text/javascript" src="checkers/Images.js"></script>
@@ -21,19 +20,10 @@
   <script type="text/javascript" src="checkers/View.js"></script>
 
   <script type="text/javascript" src="checkers/AI/RandomAI.js"></script>
+  <script type="text/javascript" src="checkers/AI/MinMaxAI.js"></script>
 
-  <script type="text/javascript">
-    function clearLog() {
-      var input = document.getElementById('logField');
-	  input.innerHTML = "";
-    }
-
-	function printBoard(){
-		naclModule.postMessage('printBoard');
-	}
-  </script>
 </head>
-<body onload="pageDidLoad('hello_world_interactive', 'newlib'); gStart();">
+<body onload="pageDidLoad('hello_world_interactive', 'newlib'); jsCheckersStart();">
 
   <div id="listener">
     <script type="text/javascript">
@@ -48,12 +38,12 @@
     <textarea id="logField" name="logField" rows="25" cols="45"></textarea>
     <div/>
     <table>
-    <button id="fortyTwoButton" onclick="sendNewGameToNaCl()">New Game</button>
+    	<button id="fortyTwoButton" onclick="sendNewGameToNaCl()">New Game</button>
  	<button id="printBoard" onclick="printBoard()">NaCl Print Board</button>
-    <button id="reverseTextButton" onclick="clearLog()">Clear Log</button>
+    	<button id="reverseTextButton" onclick="clearLog()">Clear Log</button>
 	<button id="setPlayers" onclick="setPlayersToNaCl()">Set Players</button>
-<button id="stop" onclick="stop = true;">Stop</button>
-<button id="stop" onclick="setPlayersToNaCl(); sendNewGameToNaCl();">SetPlayers and New Game</button>	
+	<button id="stop" onclick="stop = true;">Stop</button>
+	<button id="setAndStart" onclick="setPlayersToNaCl(); sendNewGameToNaCl();">SetPlayers and New Game</button>	
     <table/>
   </div>
 </body>

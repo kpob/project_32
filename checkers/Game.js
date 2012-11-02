@@ -1,6 +1,6 @@
 var checkers;
 
-function gStart() {
+function jsCheckersStart() {
 	log("Matrix checkers\n");
 	checkers = new Checkers();
 	checkers.init();
@@ -9,7 +9,7 @@ function gStart() {
 Checkers = function() {
 	this.view;
 	this.images;
-	this.controler;
+	this.AI;
 };
 
 Checkers.prototype = {
@@ -19,35 +19,49 @@ Checkers.prototype = {
 	},
 
 	init2 : function() {
-		this.controler = new Controler();
 		this.view = new View();
 		this.model = new Model();
-
-		this.controler.setView(this.view);
-		this.controler.setModel(this.model);
-
 		this.view.setImages(this.images);
 		this.view.initKineticStageAndLayers();
 		this.view.drawBoard();
+	},
 
-		// inicjalizacja planszy
+	initNewGame : function(){
 		this.model.init();
-		//this.view.drawPawns(this.model.fields);
+		this.view.drawPawns(this.model.fields);
 	},
 
-	setJSPlayer : function (color, algorithmName){
-		if(color == "white"){
-			//log("W");
-			var whitePlayer = new Player();
-			whitePlayer.setAI(new RandomAI());
-			whitePlayer.setColor("white");
-			this.controler.setWhitePlayer(whitePlayer);
-		}else{
-			//log("B");
-			var blackPlayer = new Player();
-			blackPlayer.setColor("black");
-			blackPlayer.setAI(new RandomAI());
-			this.controler.setBlackPlayer(blackPlayer);
-		}
+	setPlayer: function(color, algorithm){
+		log("color: "+color);
+		this.player = new Player();
+		this.player.setColor(color);
+		this.player.setAI(new MinMaxAI());
+//		this.player.setAI(new RandomAI());
+		//log("setPlayer: "+this.player.color);
 	},
+
+	makeJsMove: function(){
+		var fields = this.model.getFields();
+		this.player.makeMove(fields);
+	},
+
+	makeNaClMove: function(move){
+		move = move.split(',');
+		var fields = this.model.getFields();
+		var from = parseInt(move[0]);
+		var to = parseInt(move[1]);	
+	
+		var beatingList = [];
+		for(var i = 2; i<move.length; i++)
+			beatingList.push(parseInt(move[i]));
+	
+		var opositColor = Moves.opositColor(this.player.color);
+		Moves.move(fields, from, to, beatingList, opositColor);
+
+		for(i in beatingList){
+			checkers.view.deleteFigure(beatingList[i]);
+		}	
+		checkers.view.moveFigure(from, to);
+	}
+
 };

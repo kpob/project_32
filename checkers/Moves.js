@@ -12,19 +12,16 @@ Moves = function() {
 };
 
 Moves.prototype = {
-	getA : function() {
-		log(this.a);
-	},
 
-	getMovesForWhite : function(fields) {
-		return this.movesList(fields);
-	},
-
-	getMovesForBlack : function(fields) {
-		var moves = this.movesList(this.rotateFields(fields));
-
-		this.rotateFields(fields);
-		return this.rotateMoves(moves);
+	getMoves : function(fields, color){
+		if(color == "white"){
+			return this.movesList(fields);			
+		}else if(color == "black"){
+			var moves = this.movesList(this.rotateFields(fields));
+			this.rotateFields(fields);
+			return this.rotateMoves(moves);
+		}
+		log("PROBLEM Z WYBOREM KOLORU W getMoves");
 	},
 
 	rotateMoves : function(moves) {
@@ -343,6 +340,16 @@ Moves.prototype = {
 		return dr;
 	},
 
+	move : function(fields, from, to, beatList, color){
+		if(color == "white"){
+			this.moveWhite(fields, from, to, beatList);
+		}else if(color == "black"){
+			this.moveBlack(fields, from, to, beatList);
+		}else{
+			log("PROBLEM Z WYBOREM KOLORU Move.move");
+		}
+	},
+
 	moveWhite : function(fields, from, to, beatList) {
 		if(fields[from].isQueen() || to == 31 || to == 30 || to == 29 || to == 28){
 			fields[to].setQueen();
@@ -366,11 +373,16 @@ Moves.prototype = {
 	deletePawns : function(fields, beatList) {
 		if(beatList){
 			for(i in beatList){
-				//log("zbijam "+beatList[i]);
 				fields[beatList[i]].setFree();
 			}
 		}
 		beatList = [];
+	},
+
+	opositColor : function(color){
+		if(color == "white")
+			return "black";
+		return "white";
 	}
 };
 
