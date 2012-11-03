@@ -2,7 +2,7 @@
  * game.cc
  *
  *  Created on: 19-10-2012
- *      Author: qwerty
+ *      Author: Krzysztof Pobiarżyn
  */
 
 #include "include/game.h"
@@ -20,7 +20,7 @@ Game::Game() : currentState(0), previousState(0), pWhite(0), pBlack(0), isSet(fa
 }
 
 void Game::newGame(){
-	currentState = new GameState(0x00000fff, 0xfff00000, 0, white);
+	currentState = new GameState(0x00000fff, 0xfff00000, 0, black);
 }
 
 void Game::setPlayers(std::string player1, std::string player2){
@@ -30,7 +30,7 @@ void Game::setPlayers(std::string player1, std::string player2){
 	if(pWhiteArgs.at(1) == "js"){
 		pWhite = new Player(0, white, "js");
 	}else{
-		if(pWhiteArgs.at(2) == "minmax")
+		if(pWhiteArgs.at(2).find("minmax") == 0)
 			pWhite = new Player(new MinMax(), white, "nacl");
 		else if(pWhiteArgs.at(2) == "ab")
 			pWhite = new Player(new MinMax(), white, "nacl");

@@ -14,12 +14,6 @@ Random::Random() : AI() {
 
 }
 
-int Random::compute(GameState *gs, int depth){
-	//MoveGen &generator = MoveGen::getInstance();
-	//std::vector<GameState *> next = nextStates(state);
-	return 0;
-}
-
 void Random::pickState(){
 	std::vector<GameState *> next = nextStates(Game::getInstance().state());
 	int random = rand() % next.size();

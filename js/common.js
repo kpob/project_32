@@ -106,7 +106,7 @@ function newGame(){
 }
 
 function setPlayersToNaCl(){
-	naclModule.postMessage('setPlayers:black,js,random,white,nacl,random');
+	naclModule.postMessage('setPlayers:black,js,minmax,white,nacl,minmax');
 	log("js: setPlayers");
 }
 

@@ -16,7 +16,7 @@ NACL_LDFLAGS:=-g -pthread -lppapi_cpp -lppapi
 VALID_TOOLCHAINS:=newlib
 TOOLCHAIN?=newlib
 
-HELLO_WORLD_INTERACTIVE_CXX:=main.cc checkers.cc move_gen.cc game_state.cc game.cc helper.cc player.cc random.cc ai.cc minmax.cc
+HELLO_WORLD_INTERACTIVE_CXX:=main.cc checkers.cc move_gen.cc game_state.cc game.cc helper.cc player.cc random.cc ai.cc minmax.cc search_node.cc
 HELLO_WORLD_INTERACTIVE_CXXFLAGS:=$(NACL_CXXFLAGS)
 HELLO_WORLD_INTERACTIVE_LDFLAGS:=$(NACL_LDFLAGS)
 

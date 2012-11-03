@@ -9,6 +9,7 @@
 #define PLAYER_H_
 
 #include "ai.h"
+#include <string>
 
 class Player{
 private:

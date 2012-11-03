@@ -8,8 +8,8 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "board.h"
 #include "player.h"
+#include <string>
 
 class Game {
 private:

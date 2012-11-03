@@ -9,7 +9,6 @@
 #define MOVE_GEN_H_
 
 #include <vector>
-#include "board.h"
 #include "game_state.h"
 
 class MoveGen {

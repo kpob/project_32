@@ -21,13 +21,16 @@ void GameState::tooglePlayer(){
 
 	if(currentPlayer == black){
 		currentPlayer = white;
-	}else{
+	}else if(currentPlayer == white){
 		currentPlayer = black;
+	}else{
+		std::cout << "CHUJ" << std::endl;
 	}
 }
 
 void GameState::setPlayer(int player){
 	currentPlayer = player;
+
 }
 
 

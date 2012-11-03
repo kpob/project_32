@@ -10,6 +10,7 @@
 
 #include "move_gen.h"
 #include "game_state.h"
+#include "search_node.h"
 
 class AI{
 
@@ -21,13 +22,14 @@ private:
 	void nextJumps(GameState *gs, int from, std::vector<GameState*> &v);
 
 protected:
-	int reward(GameState *s, int player);
+
 
 public:
 	AI();
 	virtual ~AI(){}
-	virtual int compute(GameState *state, int depth) = 0;
+	virtual void pickState() = 0;
 	std::vector<GameState *> nextStates(GameState *gs);
+	SearchNode* reward(GameState *s);
 	
 };
 

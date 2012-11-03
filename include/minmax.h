@@ -12,12 +12,20 @@
 #include "game_state.h"
 
 class MinMax : public AI{
+private:
+	GameState* compute(GameState *state);
+	SearchNode* search(GameState* state, int depth);
+
+	int depth;
 
 public:
 	MinMax();
+	MinMax(int depth);
 	//~MinMax();
 
-	int compute(GameState *state, int depth);
+
+	void pickState();
+	//int max(GameState* state, int depth);
 };
 
 

@@ -16,7 +16,6 @@ private:
 public:
 	Random();
 
-	int compute(GameState *state, int depth);
 	void pickState();
 };
 

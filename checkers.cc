@@ -68,13 +68,15 @@ void CheckersInstance::handleSetPlayers(const std::string& message){
 	size_t sepPos = message.find_first_of(methodSeparator);
 	std::string stringArgs = message.substr(sepPos + 1);
 	
-	size_t whitePos = stringArgs.find_first_of("white");
+	size_t whitePos = stringArgs.find("white");
 	
-	std::string player1 = stringArgs.substr(0, whitePos -1);
+	std::string player1 = stringArgs.substr(0, whitePos-1);
 	std::string player2 = stringArgs.substr(whitePos, std::string::npos);
-
 	Game::getInstance().setPlayers(player1, player2);
-
+	std::vector<std::string> pWhiteArgs = helper::args2vector(player2);
+	for(unsigned i=0; i<pWhiteArgs.size();i++){
+		PostMessage(pp::Var(pWhiteArgs.at(i)));
+	}
 	PostMessage(pp::Var(message)); // javascript musi rowniez ustawic playerow
 }
 
@@ -109,6 +111,8 @@ void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesV
 
 		gen.nextMove(from, to);
 	}
+
+	
 	Game::getInstance().state()->tooglePlayer();
 	if(!(gen.getJumpers(Game::getInstance().state()) || gen.getMovers(Game::getInstance().state())))	
 		PostMessage(pp::Var("endGame"));
@@ -119,8 +123,8 @@ void CheckersInstance::makeNaclMove(){
 
 	ss << moveMethodId;	
 	srand(time(NULL));
+
 	Game::getInstance().currentPlayer()->nextMove();
-	
 	uint32_t move = Game::getInstance().lastMoveBitboard();
 	for(int i=0; i<32;i++)
 		if((move & Game::getInstance().prevState()->whites()) & (1<<i))
@@ -128,7 +132,7 @@ void CheckersInstance::makeNaclMove(){
 	for(int i=0; i<32;i++)
 		if((move & Game::getInstance().state()->whites()) & (1<<i))
 			ss << i << ",";
-	
+
 	Game::getInstance().state()->tooglePlayer();
 	uint32_t opponentPawnsDiff = Game::getInstance().opponentPawnsDiffBitboard();
 	helper::bitboard2stream(ss, opponentPawnsDiff);
