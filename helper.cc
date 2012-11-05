@@ -13,6 +13,7 @@
 #include <iostream>
 #include <algorithm>
 #include <iterator>
+#include <stdio.h>
 
 namespace helper{
 
@@ -100,6 +101,13 @@ void bitboard2stream(std::stringstream &stream, const uint32_t bitboard){
 std::string message2stringArgs(const std::string message){
 	size_t sepPos = message.find_first_of(":");
 	return (message.substr(sepPos + 1));
+}
+
+void logmsg(const char* pMsg){
+  fprintf(stdout,"logmsg: %s\n",pMsg);
+}
+void errormsg(const char* pMsg){
+  fprintf(stderr,"logerr: %s\n",pMsg);
 }
 
 

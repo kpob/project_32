@@ -22,3 +22,6 @@ void SearchNode::setValue(int val){
 	value = val;
 }
 
+void SearchNode::setState(GameState* val){
+	state = val;
+}

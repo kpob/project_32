@@ -16,11 +16,12 @@ private:
 
 public:
 	SearchNode(GameState *state, int value);
-
+	~SearchNode(){};
 	int getValue();
 	GameState* getState();
 
 	void setValue(int val);
+	void setState(GameState* val);
 
 };
 

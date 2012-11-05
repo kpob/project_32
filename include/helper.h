@@ -23,7 +23,8 @@ std::vector<std::string> args2vector(std::string);
 void bitboard2stream(std::stringstream &stream, const uint32_t bitboard);
 
 std::string message2stringArgs(const std::string message);
-
+void logmsg(const char* pMsg);
+void errormsg(const char* pMsg);
 }
 
 

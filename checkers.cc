@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <vector>
+#include <iostream>
 
 #include "ppapi/cpp/input_event.h"
 #include "ppapi/cpp/instance.h"
@@ -48,7 +49,7 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
 	if (!var_message.is_string())
 		return;
 	std::string message = var_message.AsString();
-  
+  	helper::logmsg("--handle--");
 	if (message == printBoardMethodId)
 		handlePrintBoard();
 	else if (message.find(setPlayersString) == 0) 
@@ -57,6 +58,8 @@ void CheckersInstance::HandleMessage(const pp::Var& var_message) {
 		handleNewGame(message);
 	else if(message.find(moveMethodId) == 0)
 		handleMove(message);
+	else if(message.find("naclMove") == 0)
+		makeNaclMove();
 }
 
 void CheckersInstance::handlePrintBoard(){
@@ -74,9 +77,6 @@ void CheckersInstance::handleSetPlayers(const std::string& message){
 	std::string player2 = stringArgs.substr(whitePos, std::string::npos);
 	Game::getInstance().setPlayers(player1, player2);
 	std::vector<std::string> pWhiteArgs = helper::args2vector(player2);
-	for(unsigned i=0; i<pWhiteArgs.size();i++){
-		PostMessage(pp::Var(pWhiteArgs.at(i)));
-	}
 	PostMessage(pp::Var(message)); // javascript musi rowniez ustawic playerow
 }
 
@@ -100,7 +100,7 @@ void CheckersInstance::handleMove(const std::string& message){
 	std::vector<std::string> argsVector = helper::args2vector(stringArgs);
 		
 	makeMovesFromVector(argsVector);
-	makeNaclMove();
+	//makeNaclMove();
 }
 
 void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesVector){
@@ -108,12 +108,10 @@ void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesV
 	for(unsigned i=0; i<movesVector.size(); i+=2){
 		int from = atoi(movesVector.at(i).c_str());
 		int to = atoi(movesVector.at(i+1).c_str());
-
 		gen.nextMove(from, to);
 	}
-
-	
 	Game::getInstance().state()->tooglePlayer();
+	PostMessage(pp::Var("zmiana"));
 	if(!(gen.getJumpers(Game::getInstance().state()) || gen.getMovers(Game::getInstance().state())))	
 		PostMessage(pp::Var("endGame"));
 }
@@ -123,8 +121,13 @@ void CheckersInstance::makeNaclMove(){
 
 	ss << moveMethodId;	
 	srand(time(NULL));
-
+	time_t start, end;
+	time(&start);
 	Game::getInstance().currentPlayer()->nextMove();
+	time(&end);
+	std::stringstream aa;
+	aa << "czas " << difftime(end, start);
+	PostMessage(pp::Var(aa.str()));
 	uint32_t move = Game::getInstance().lastMoveBitboard();
 	for(int i=0; i<32;i++)
 		if((move & Game::getInstance().prevState()->whites()) & (1<<i))
@@ -141,10 +144,13 @@ void CheckersInstance::makeNaclMove(){
 	PostMessage(pp::Var(ss.str().substr(0, lastComma)));
 
 	MoveGen &gen  = MoveGen::getInstance();
-	if(gen.getJumpers(Game::getInstance().state()) || gen.getMovers(Game::getInstance().state()))	
+	if(gen.getJumpers(Game::getInstance().state()) || gen.getMovers(Game::getInstance().state())){	
+		//PostMessage(pp::Var(helper::printBoard(Game::getInstance().state())));	
 		sendMovePrompt();
-	else
+	}else{
+		//PostMessage(pp::Var(helper::printBoard(Game::getInstance().state())));	
 		PostMessage(pp::Var("endGame"));
+	}
 }
 
 void CheckersInstance::sendMovePrompt(){

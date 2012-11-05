@@ -62,7 +62,13 @@ void AI::nextMoves(GameState *gs, int from, std::vector<GameState*> &v) {
 		if (next) {
 			next->setPlayer(gs->player());
 			next->tooglePlayer();
-			v.push_back(next);
+			if(v.size() > 0){
+				unsigned last = v.size()-1;
+				if(next->whites() != v.at(last)->whites() || next->blacks() != v.at(last)->blacks()){
+					v.push_back(next);
+				}
+			}else
+				v.push_back(next);
 		}
 	}
 }
@@ -100,7 +106,14 @@ void AI::nextJumps(GameState *gs, int from, std::vector<GameState*> &v) {
 			next = new GameState(gs->whites(), gs->blacks(), gs->queens(), black);
 		else
 			next = new GameState(gs->whites(), gs->blacks(), gs->queens(), white);
-		v.push_back(next);
+		if(v.size() > 0){
+			unsigned last = v.size()-1;
+			if(next->whites() != v.at(last)->whites() || next->blacks() != v.at(last)->blacks())
+				v.push_back(next);
+		}else{
+			v.push_back(next);
+		}
+		
 	}
 }
 
