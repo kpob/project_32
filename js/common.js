@@ -50,15 +50,17 @@ function handleMessage(message_event) {
 			newGame();
 		}
 		else if(msg.startsWith("jsMove")){
-			if(!stop)
-				setTimeout(function(){
+			//if(!stop)
+				//setTimeout(function(){
+					//log("js");
 					checkers.makeJsMove();
-				}, 1000);
+				//}, 5000);
 		}
 		else if(msg.startsWith("move")){
-			setTimeout(function(){
+			//setTimeout(function(){
+				log("nacl");
 				checkers.makeNaClMove(msg.split(':')[1]);
-			}, 500);
+			//}, 10000);
 		}
 		else if(msg.startsWith("board")){
 			var board = msg.split(':')[1];
@@ -69,6 +71,9 @@ function handleMessage(message_event) {
 		}
 		else if(msg.startsWith('endGame')){
 			log("endGameFromNaCl");
+		}
+		else if(msg.startsWith('zmiana')){
+			naclModule.postMessage('naclMove');
 		}
 		else{
 			log("log:\n"+msg);
@@ -92,7 +97,7 @@ function decodeSetPlayers(msg){
 		lang: splitMsg[4],
 		algorithm: splitMsg[5]
 	};
-	log("nacl: setPlayers");
+	//log("nacl: setPlayers");
 
 	if(player1.lang == "js")
 		checkers.setPlayer(player1.color, player1.algorithm);
@@ -101,19 +106,19 @@ function decodeSetPlayers(msg){
 }
 
 function newGame(){
-	log("nacl: newGame");
-	naclModule.postMessage('printBoard');
+	//log("nacl: newGame");
+	//naclModule.postMessage('printBoard');
 }
 
 function setPlayersToNaCl(){
 	naclModule.postMessage('setPlayers:black,js,minmax,white,nacl,minmax');
-	log("js: setPlayers");
+	//log("js: setPlayers");
 }
 
 function sendNewGameToNaCl(){
 	checkers.initNewGame();
 	naclModule.postMessage('newGame');
-	log("js: newGame");
+	//log("js: newGame");
 }
 var stop = false;
 
