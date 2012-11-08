@@ -39,30 +39,36 @@ Player.prototype = {
 		checkers.view.moveFigure(move.from, move.to);
 
 		//ruch dla nacl
-		var movesForNacl = [];
-		if(move.beating){
-			for(j in move.beating){
-				var beat = move.beating[j];
-				if(j == 0){
-					movesForNacl.push({
-						f : move.from,
-						t : beat.end
-					});
-				}else{
-					var beatPrev = move.beating[j-1];
-					movesForNacl.push({
-						f : beatPrev.end,
-						t : beat.end
-					});
+		setTimeout(function(){
+			var movesForNacl = [];
+			if(move.beating){
+				for(j in move.beating){
+					var beat = move.beating[j];
+					if(j == 0){
+						movesForNacl.push({
+							f : move.from,
+							t : beat.end
+						});
+					}else{
+						var beatPrev = move.beating[j-1];
+						movesForNacl.push({
+							f : beatPrev.end,
+							t : beat.end
+						});
+					}
 				}
+				var moveText = "move:"+movesForNacl[0].f+","+movesForNacl[0].t;
+				for(var s=1; s<movesForNacl.length; s++){
+					moveText = moveText + ","+movesForNacl[s].f+","+movesForNacl[s].t;
+				}
+				naclModule.postMessage(moveText);
+			}else{
+				naclModule.postMessage("move:"+move.from+","+move.to);
 			}
-			var moveText = "move:"+movesForNacl[0].f+","+movesForNacl[0].t;
-			for(var s=1; s<movesForNacl.length; s++){
-				moveText = moveText + ","+movesForNacl[s].f+","+movesForNacl[s].t;
-			}
-			naclModule.postMessage(moveText);
-		}else{
-			naclModule.postMessage("move:"+move.from+","+move.to);
-		}
+		}, 1000);
+	},
+
+	executeMove2 : function(){
+
 	}
 };

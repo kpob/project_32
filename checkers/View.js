@@ -12,9 +12,10 @@ View = function() {
 	this.figuresList = [];
 
 	// Config
+	this.offset = 24;
 	this.squareSize = 60;
-	this.width = this.squareSize * 8;
-	this.height = this.squareSize * 8;
+	this.width = this.squareSize * 8+this.offset*2;
+	this.height = this.squareSize * 8+this.offset*2;
 };
 
 View.prototype = {
@@ -41,6 +42,7 @@ View.prototype = {
 	},
 
 	drawBoard : function() {
+		log("draw");
 		for ( var row = 0; row < 8; row++) {
 			for ( var column = 0; column < 8; column++) {
 				if ((row % 2 == 0 && column % 2 == 0)
@@ -51,25 +53,33 @@ View.prototype = {
 				}
 			}
 		}
+		var board = new Kinetic.Image({
+			x : 0,
+			y : 0,
+			width : this.squareSize*8+this.offset*2,
+			height : this.squareSize*8+this.offset*2,
+			image : this.images.getImage("board")
+		});
+		this.boardLayer.add(board);
 		this.boardLayer.draw();
 	},
 
 	drawWhiteSquare : function(row, column) {
 		var square = new Kinetic.Image({
-			x : row * this.squareSize,
-			y : (7 - column) * this.squareSize,
+			x : row * this.squareSize + this.offset,
+			y : (7 - column) * this.squareSize + this.offset,
 			image : this.images.getImage("whiteField"),
 			width : this.squareSize,
 			height : this.squareSize
 
 		});
-		this.boardLayer.add(square);
+		//this.boardLayer.add(square);
 	},
 
 	drawBlackSquare : function(row, column) {
 		var square = new Kinetic.Image({
-			x : row * this.squareSize,
-			y : (7 - column) * this.squareSize,
+			x : row * this.squareSize + this.offset,
+			y : (7 - column) * this.squareSize + this.offset,
 			image : this.images.getImage("blackField"),
 			width : this.squareSize,
 			height : this.squareSize
@@ -81,7 +91,7 @@ View.prototype = {
 			self.controler.onSquareClick(this.position);
 		});
 		this.squareList[square.position] = square;
-		this.boardLayer.add(square);
+		//this.boardLayer.add(square);
 	},
 
 	drawPawns : function(fields) {
@@ -152,7 +162,7 @@ View.prototype = {
 			y : XY.y,
 			width: this.squareSize,
 			height : this.squareSize,
-			duration : 1 / 10,
+			duration : 1 / 2,
 			callback : function() {
 				if (figure.color == "white" && (figure.position == 31 || figure.position == 30
 						|| figure.position == 29 || figure.position == 28)) {
@@ -191,7 +201,7 @@ View.prototype = {
 		var squareToRemove = figuresList[counter];
 		squareToRemove.transitionTo({
 			opacity : 0,
-			duration : 1/10,
+			duration : 1/2,
 			callback : function() {
 				squareToRemove.remove();
 			}

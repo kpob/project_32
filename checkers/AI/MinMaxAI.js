@@ -1,5 +1,5 @@
 MinMaxAI = function(){
-	this.depth = 1;
+	this.depth = 3;
 };
 
 MinMaxAI.prototype = {
@@ -20,7 +20,7 @@ MinMaxAI.prototype = {
 					}
 				}
 				Moves.move(newFields, move.from, move.to, beatingList, color);
-				var value = this.minMax(newFields, Moves.opositColor(color), this.depth);
+				var value = this.minMax(newFields, Moves.opositColor(color), this.depth, false);
 				if(value > bestValue){
 					bestValue = value;
 					bestMove = move;
@@ -30,9 +30,12 @@ MinMaxAI.prototype = {
 			return bestMove;
 		},
 
-		minMax : function(fields, color, depth){
+		minMax : function(fields, color, depth, flag){
 			var moves = Moves.getMoves(fields, color);
-			var bestValue = -1000;
+			if(flag)
+				var bestValue = -1000;
+			else var bestValue = 1000;
+
 			for(m in moves){
 				var move = moves[m];
 				var newFields = [];
@@ -47,9 +50,13 @@ MinMaxAI.prototype = {
 				}
 				Moves.move(newFields, move.from, move.to, beatingList, color);
 				var value;				
+				if(flag)
+					var nextFlag = false;
+				else var nextFlag = true;
+				
 				if(depth == 0)				
 					value = this.evaluation(newFields, color);
-				else value = this.minMax(newFields, Moves.opositColor(color), depth-1);		
+				else value = this.minMax(newFields, Moves.opositColor(color), depth-1, nextFlag);		
 				if(value > bestValue){
 					bestValue = value;
 				}
@@ -64,15 +71,15 @@ MinMaxAI.prototype = {
 				var field = fields[i];
 				if(field.isWhite()){
 					if(field.isQueen()){
-						value += 3;
+						value += 5;
 					}else{
-						value += 1;		
+						value += 2;		
 					}
 				} else if (field.isBlack()){
 					if(field.isQueen()){
-						value -= 3;
+						value -= 5;
 					}else{
-						value -= 1;		
+						value -= 2;		
 					}
 				}
 			}

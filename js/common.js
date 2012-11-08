@@ -51,16 +51,16 @@ function handleMessage(message_event) {
 		}
 		else if(msg.startsWith("jsMove")){
 			//if(!stop)
-				//setTimeout(function(){
-					//log("js");
+				setTimeout(function(){
+
 					checkers.makeJsMove();
-				//}, 5000);
+				}, 1000);
 		}
 		else if(msg.startsWith("move")){
-			//setTimeout(function(){
+	//		setTimeout(function(){
 				log("nacl");
 				checkers.makeNaClMove(msg.split(':')[1]);
-			//}, 10000);
+	//		}, 2000);
 		}
 		else if(msg.startsWith("board")){
 			var board = msg.split(':')[1];

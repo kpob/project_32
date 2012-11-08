@@ -20,6 +20,9 @@ Images = function() {
 	}, {
 		name : "blackQueen",
 		path : "img/blackQueen.png",
+	}, {
+		name : "board",
+		path : "img/1.png",
 	} ];
 	this.images = [];
 	this.count = 0;
@@ -58,9 +61,5 @@ Images.prototype = {
 				return images[i].image;
 			}
 		}
-	},
-	
-	say : function(){
-		logl("img");
 	}
 };
