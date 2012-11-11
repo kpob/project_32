@@ -1,9 +1,12 @@
 MinMaxAI = function(){
-	this.depth = 3;
+	this.depth = 4;
+	this.count = 0;
 };
 
 MinMaxAI.prototype = {
 		pickMove : function(fields, color){
+			var start = new Date();
+			this.count = 0;
 			var moves = Moves.getMoves(fields, color);
 			var bestValue = -1000;
 			var bestMove;	
@@ -26,7 +29,9 @@ MinMaxAI.prototype = {
 					bestMove = move;
 				}
 			}
-
+			var end = new Date();
+			var time = end.getTime() - start.getTime();
+			log("Przeszukane: "+this.count+"\nCzas: "+time/1000+"s \nCzas na 1 ruch: "+time/this.count+"ms");
 			return bestMove;
 		},
 
@@ -61,6 +66,7 @@ MinMaxAI.prototype = {
 					bestValue = value;
 				}
 			}
+			this.count++;
 			return bestValue;			
 		},
 
