@@ -1,5 +1,5 @@
 #include <ppapi/cpp/module.h>
-#include "include/checkers.h"
+#include "includes/checkers.h"
 
 namespace checkers {
 

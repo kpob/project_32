@@ -1,5 +1,5 @@
-#include "include/game_state.h"
-#include "include/types.h"
+#include "includes/game_state.h"
+#include "includes/types.h"
 #include <iostream>
 
 GameState::GameState(BITBOARD w, BITBOARD b, BITBOARD q) :

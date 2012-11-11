@@ -12,9 +12,9 @@
 #include "ppapi/cpp/module.h"
 #include "ppapi/cpp/var.h"
 
-#include "include/checkers.h"
-#include "include/move_gen.h"
-#include "include/helper.h"
+#include "includes/checkers.h"
+#include "includes/move_gen.h"
+#include "includes/helper.h"
 
 namespace checkers { 
 
@@ -125,7 +125,9 @@ void CheckersInstance::makeNaclMove(){
 	time(&start);
 	Game::getInstance().currentPlayer()->nextMove();
 	time(&end);
+	
 	std::stringstream aa;
+	std::cout << "log: czas " << difftime(end, start);
 	aa << "czas " << difftime(end, start);
 	PostMessage(pp::Var(aa.str()));
 	uint32_t move = Game::getInstance().lastMoveBitboard();

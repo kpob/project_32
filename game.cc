@@ -5,16 +5,16 @@
  *      Author: Krzysztof Pobiarżyn
  */
 
-#include "include/game.h"
-#include "include/types.h"
+#include "includes/game.h"
+#include "includes/types.h"
 #include <stdlib.h>
 #include <iostream>
 
-#include "include/player.h"
-#include "include/move_gen.h"
-#include "include/minmax.h"
-#include "include/random.h"
-#include "include/helper.h"
+#include "includes/player.h"
+#include "includes/move_gen.h"
+#include "includes/minmax.h"
+#include "includes/random.h"
+#include "includes/helper.h"
 
 Game::Game() : currentState(0), previousState(0), pWhite(0), pBlack(0), isSet(false){
 }

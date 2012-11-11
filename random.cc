@@ -5,8 +5,8 @@
  *      Author: Krzysztof Pobiarżyn
  */
 
-#include "include/random.h"
-#include "include/game.h"
+#include "includes/random.h"
+#include "includes/game.h"
 
 #include <vector>
 #include <stdlib.h>

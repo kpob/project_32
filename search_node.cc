@@ -4,7 +4,7 @@
  *  Created on: 31-10-2012
  *      Author: KrzysztofPobiarżyn
  */
-#include "include/search_node.h"
+#include "includes/search_node.h"
 
 SearchNode::SearchNode(GameState *state, int value) : state(state), value(value){
 

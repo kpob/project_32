@@ -4,9 +4,9 @@
  *  Created on: 26-10-2012
  *      Author: Krzysztof Pobiarżyn
  */
-#include "include/player.h"
-#include "include/random.h"
-#include "include/minmax.h"
+#include "includes/player.h"
+#include "includes/random.h"
+#include "includes/minmax.h"
 #include <iostream>
 
 Player::Player(AI *algorithm, int color, std::string language) :

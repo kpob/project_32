@@ -5,10 +5,10 @@
  *      Author: Krzysztof Pobiarżyn
  */
 
-#include "include/move_gen.h"
-#include "include/helper.h"
-#include "include/game.h"
-#include "include/game_state.h"
+#include "includes/move_gen.h"
+#include "includes/helper.h"
+#include "includes/game.h"
+#include "includes/game_state.h"
 
 #include <stdint.h>
 

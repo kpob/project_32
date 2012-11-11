@@ -10,7 +10,7 @@
 #include "ppapi/cpp/point.h"
 #include "ppapi/cpp/var.h"
 
-#include "include/view.h"
+#include "includes/view.h"
 
 namespace {
 

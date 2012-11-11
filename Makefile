@@ -8,7 +8,7 @@ CHROME_PATH?=Undefined
 NACL_WARNINGS:=-Wno-long-long -Wall -Wswitch-enum -Werror -pedantic
 NACL_CCFLAGS:=-O0 -g -pthread $(NACL_WARNINGS)
 NACL_CXXFLAGS:= -O0 -g -pthread -std=gnu++98 $(NACL_WARNINGS)
-NACL_LDFLAGS:=-g -pthread -lppapi_cpp -lppapi  
+NACL_LDFLAGS:=-g -pthread -lppapi_cpp -lppapi
 
 #
 # Project Settings
@@ -16,15 +16,15 @@ NACL_LDFLAGS:=-g -pthread -lppapi_cpp -lppapi
 VALID_TOOLCHAINS:=newlib
 TOOLCHAIN?=newlib
 
-HELLO_WORLD_INTERACTIVE_CXX:=main.cc checkers.cc move_gen.cc game_state.cc game.cc helper.cc player.cc random.cc ai.cc minmax.cc search_node.cc
-HELLO_WORLD_INTERACTIVE_CXXFLAGS:=$(NACL_CXXFLAGS)
-HELLO_WORLD_INTERACTIVE_LDFLAGS:=$(NACL_LDFLAGS)
+CHECKERS_CXX:=main.cc checkers.cc move_gen.cc game_state.cc game.cc helper.cc player.cc random.cc ai.cc minmax.cc search_node.cc
+CHECKERS_CXXFLAGS:=$(NACL_CXXFLAGS)
+CHECKERS_LDFLAGS:=$(NACL_LDFLAGS)
 
 
 #
 # Default target
 #
-all: newlib/hello_world_interactive.nmf 
+all: newlib/checkers.nmf 
 
 #
 # Alias for standard commands
@@ -77,8 +77,6 @@ NEWLIB_CXX?=$(TC_PATH)/$(OSNAME)_x86_newlib/bin/i686-nacl-g++ -c
 NEWLIB_LINK?=$(TC_PATH)/$(OSNAME)_x86_newlib/bin/i686-nacl-g++ -Wl,-as-needed
 NEWLIB_DUMP?=$(TC_PATH)/$(OSNAME)_x86_newlib/x86_64-nacl/bin/objdump
 
-
-
 #
 # NMF Manifiest generation
 #
@@ -107,23 +105,23 @@ endif
 newlib:
 	$(MKDIR) newlib
 
-NEWLIB_HELLO_WORLD_INTERACTIVE_x86_32_CXX_O:=$(patsubst %.cc, newlib/%_x86_32.o,$(HELLO_WORLD_INTERACTIVE_CXX))
-$(NEWLIB_HELLO_WORLD_INTERACTIVE_x86_32_CXX_O) : newlib/%_x86_32.o : %.cc $(THIS_MAKE) | newlib
-	$(NEWLIB_CXX) -o $@ $< -m32 $(HELLO_WORLD_INTERACTIVE_CXXFLAGS) -DTCNAME=newlib
+CHECKERS_x86_32_CXX_O:=$(patsubst %.cc, newlib/%_x86_32.o,$(CHECKERS_CXX))
+$(CHECKERS_x86_32_CXX_O) : newlib/%_x86_32.o : %.cc $(THIS_MAKE) | newlib
+	$(NEWLIB_CXX) -o $@ $< -m32 $(CHECKERS_CXXFLAGS) -DTCNAME=newlib
 
-newlib/hello_world_interactive_x86_32.nexe : $(NEWLIB_HELLO_WORLD_INTERACTIVE_x86_32_CXX_O)
-	$(NEWLIB_LINK) -o $@ $^ -m32 $(HELLO_WORLD_INTERACTIVE_LDFLAGS)
-NEWLIB_NMF+=newlib/hello_world_interactive_x86_32.nexe 
+newlib/checkers_x86_32.nexe : $(CHECKERS_x86_32_CXX_O)
+	$(NEWLIB_LINK) -o $@ $^ -m32 $(CHECKERS_LDFLAGS)
+NEWLIB_NMF+=newlib/checkers_x86_32.nexe 
 
-NEWLIB_HELLO_WORLD_INTERACTIVE_x86_64_CXX_O:=$(patsubst %.cc, newlib/%_x86_64.o,$(HELLO_WORLD_INTERACTIVE_CXX))
-$(NEWLIB_HELLO_WORLD_INTERACTIVE_x86_64_CXX_O) : newlib/%_x86_64.o : %.cc $(THIS_MAKE) | newlib
-	$(NEWLIB_CXX) -o $@ $< -m64 $(HELLO_WORLD_INTERACTIVE_CXXFLAGS) -DTCNAME=newlib
+CHECKERS_x86_64_CXX_O:=$(patsubst %.cc, newlib/%_x86_64.o,$(CHECKERS_CXX))
+$(CHECKERS_x86_64_CXX_O) : newlib/%_x86_64.o : %.cc $(THIS_MAKE) | newlib
+	$(NEWLIB_CXX) -o $@ $< -m64 $(CHECKERS_CXXFLAGS) -DTCNAME=newlib
 
-newlib/hello_world_interactive_x86_64.nexe : $(NEWLIB_HELLO_WORLD_INTERACTIVE_x86_64_CXX_O)
-	$(NEWLIB_LINK) -o $@ $^ -m64 $(HELLO_WORLD_INTERACTIVE_LDFLAGS)
-NEWLIB_NMF+=newlib/hello_world_interactive_x86_64.nexe 
+newlib/checkers_x86_64.nexe : $(CHECKERS_x86_64_CXX_O)
+	$(NEWLIB_LINK) -o $@ $^ -m64 $(CHECKERS_LDFLAGS)
+NEWLIB_NMF+=newlib/checkers_x86_64.nexe 
 
-newlib/hello_world_interactive.nmf : $(NEWLIB_NMF)
+newlib/checkers.nmf : $(NEWLIB_NMF)
 	$(NMF) -D $(NEWLIB_DUMP) -o $@ $^ -t newlib -s newlib
 
 

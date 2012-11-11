@@ -5,9 +5,9 @@
  *      Author: Krzysztof Pobiarżyn
  */
 
-#include "include/helper.h"
-#include "include/types.h"
-#include "include/game_state.h"
+#include "includes/helper.h"
+#include "includes/types.h"
+#include "includes/game_state.h"
 #include <sstream>
 #include <string>
 #include <iostream>

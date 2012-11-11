@@ -5,9 +5,9 @@
  *      Author: Krzysztof Pobiarżyn
  */
 
-#include "include/ai.h"
-#include "include/game_state.h"
-#include "include/game.h"
+#include "includes/ai.h"
+#include "includes/game_state.h"
+#include "includes/game.h"
 #include <vector>
 #include <iostream>
 

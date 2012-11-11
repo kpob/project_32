@@ -5,15 +5,15 @@
  *      Author: Krzysztof Pobiarżyn
  */
 
-#include "include/minmax.h"
-#include "include/game.h"
-#include "include/search_node.h"
-#include "include/helper.h"
+#include "includes/minmax.h"
+#include "includes/game.h"
+#include "includes/search_node.h"
+#include "includes/helper.h"
 #include <time.h>
 #include <sstream>
 #include <iostream>
 MinMax::MinMax() :
-		AI(), depth(6) {
+		AI(), depth(7), serchedStates(0) {
 }
 
 MinMax::MinMax(int depth) : AI(), depth(depth){
@@ -25,9 +25,10 @@ GameState *MinMax::compute(GameState *state) {
 	std::vector<GameState *> next = nextStates(state);
 	int bv = -10000000;
 	GameState* bs = 0;
+	serchedStates=0;
 	for (unsigned i = 0; i < next.size(); i++) {
+		serchedStates++;
 		std::vector<GameState *> nn = nextStates(next.at(i));
-		for(unsigned j=0; j<nn.size();j++)
 		SearchNode* val = search(next.at(i), depth);
 		if (val->getValue() > bv) {
 			std::cout << "log " << "PRZED new value\n"; 
@@ -37,10 +38,12 @@ GameState *MinMax::compute(GameState *state) {
 		}else
 			delete val;
 	}
+	std::cout << "log: " << serchedStates <<"\n"; 
 	return (bs);
 }
 
 SearchNode* MinMax::search(GameState* state, int depth) {
+	serchedStates++;
 	std::vector<GameState *> next = nextStates(state);
 	if (next.size() == 0 || depth == 0){
 		return (reward(state));
