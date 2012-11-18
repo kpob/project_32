@@ -13,7 +13,7 @@
 #include <sstream>
 #include <iostream>
 MinMax::MinMax() :
-		AI(), depth(7), serchedStates(0) {
+		AI(), depth(6), serchedStates(0) {
 }
 
 MinMax::MinMax(int depth) : AI(), depth(depth){
@@ -31,16 +31,15 @@ GameState *MinMax::compute(GameState *state) {
 		std::vector<GameState *> nn = nextStates(next.at(i));
 		SearchNode* val = search(next.at(i), depth);
 		if (val->getValue() > bv) {
-			std::cout << "log " << "PRZED new value\n"; 
 			bs = next.at(i);
 			bv = val->getValue();
-			std::cout << "log " << "PO new value\n"; 
 		}else
 			delete val;
 	}
-	std::cout << "log: " << serchedStates <<"\n"; 
+	std::cout << "log: przeszukano " << serchedStates <<" stanow\n"; 
 	return (bs);
 }
+
 
 SearchNode* MinMax::search(GameState* state, int depth) {
 	serchedStates++;
@@ -62,6 +61,7 @@ SearchNode* MinMax::search(GameState* state, int depth) {
 				delete val;
 			}
 		}
+
 	} else {
 		for (unsigned i = 0; i < next.size(); i++) {
 			SearchNode *val = search(next.at(i), depth - 1);
@@ -72,7 +72,7 @@ SearchNode* MinMax::search(GameState* state, int depth) {
 			}
 		}
 	}
-
+	
 	return (bestMove);
 }
 

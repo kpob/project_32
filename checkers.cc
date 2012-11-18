@@ -100,7 +100,6 @@ void CheckersInstance::handleMove(const std::string& message){
 	std::vector<std::string> argsVector = helper::args2vector(stringArgs);
 		
 	makeMovesFromVector(argsVector);
-	//makeNaclMove();
 }
 
 void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesVector){
@@ -117,19 +116,34 @@ void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesV
 }
 
 void CheckersInstance::makeNaclMove(){
-	std::stringstream ss;
-
-	ss << moveMethodId;	
 	srand(time(NULL));
 	time_t start, end;
-	time(&start);
-	Game::getInstance().currentPlayer()->nextMove();
+	time(&start); 
+	pthread_create(&computeMoveThread, NULL, computeMove, this);
+	(void) pthread_join(computeMoveThread, NULL);
 	time(&end);
 	
 	std::stringstream aa;
 	std::cout << "log: czas " << difftime(end, start);
 	aa << "czas " << difftime(end, start);
 	PostMessage(pp::Var(aa.str()));
+	
+	PostMessage(pp::Var(naclMoveResult));
+	
+	MoveGen &gen  = MoveGen::getInstance();
+	if(gen.getJumpers(Game::getInstance().state()) || gen.getMovers(Game::getInstance().state()))
+		sendMovePrompt();
+	else
+		PostMessage(pp::Var("endGame"));
+	
+}
+
+void* CheckersInstance::computeMove(void* param) {
+	std::stringstream ss;
+
+	ss << moveMethodId;	
+	CheckersInstance* ci = static_cast<CheckersInstance*>(param);
+	Game::getInstance().currentPlayer()->nextMove();
 	uint32_t move = Game::getInstance().lastMoveBitboard();
 	for(int i=0; i<32;i++)
 		if((move & Game::getInstance().prevState()->whites()) & (1<<i))
@@ -141,18 +155,11 @@ void CheckersInstance::makeNaclMove(){
 	Game::getInstance().state()->tooglePlayer();
 	uint32_t opponentPawnsDiff = Game::getInstance().opponentPawnsDiffBitboard();
 	helper::bitboard2stream(ss, opponentPawnsDiff);
-	
 	size_t lastComma = ss.str().find_last_of(argsSeparator);
-	PostMessage(pp::Var(ss.str().substr(0, lastComma)));
+	
+	ci->naclMoveResult = ss.str().substr(0, lastComma);
 
-	MoveGen &gen  = MoveGen::getInstance();
-	if(gen.getJumpers(Game::getInstance().state()) || gen.getMovers(Game::getInstance().state())){	
-		//PostMessage(pp::Var(helper::printBoard(Game::getInstance().state())));	
-		sendMovePrompt();
-	}else{
-		//PostMessage(pp::Var(helper::printBoard(Game::getInstance().state())));	
-		PostMessage(pp::Var("endGame"));
-	}
+	return 0;
 }
 
 void CheckersInstance::sendMovePrompt(){

@@ -18,11 +18,10 @@ private:
 
 	int depth;
 	int serchedStates;
-
 public:
 	MinMax();
 	MinMax(int depth);
-
+	
 	int getS(){
 		return serchedStates;
 	}

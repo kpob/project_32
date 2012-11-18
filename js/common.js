@@ -50,17 +50,14 @@ function handleMessage(message_event) {
 			newGame();
 		}
 		else if(msg.startsWith("jsMove")){
-			//if(!stop)
 				setTimeout(function(){
 
 					checkers.makeJsMove();
 				}, 1000);
 		}
 		else if(msg.startsWith("move")){
-	//		setTimeout(function(){
 				log("nacl");
 				checkers.makeNaClMove(msg.split(':')[1]);
-	//		}, 2000);
 		}
 		else if(msg.startsWith("board")){
 			var board = msg.split(':')[1];

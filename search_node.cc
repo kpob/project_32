@@ -5,9 +5,15 @@
  *      Author: KrzysztofPobiarżyn
  */
 #include "includes/search_node.h"
+#include "includes/game.h"
 
 SearchNode::SearchNode(GameState *state, int value) : state(state), value(value){
 
+}
+
+SearchNode::~SearchNode(){
+	//if(state != Game::getInstance().state())
+	delete state;
 }
 
 int SearchNode::getValue(){
@@ -23,5 +29,6 @@ void SearchNode::setValue(int val){
 }
 
 void SearchNode::setState(GameState* val){
-	state = val;
+	delete state;
+	state = new GameState(val->whites(), val->blacks(), val->queens(), val->player());
 }

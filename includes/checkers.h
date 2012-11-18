@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <time.h>
+#include <pthread.h>
 
 #include "ppapi/cpp/instance.h"
 
@@ -28,6 +29,10 @@ class CheckersInstance : public pp::Instance {
 		void makeMovesFromVector(const std::vector<std::string> movesVector);
 
 		void sendMovePrompt();
+		static void* computeMove(void* param);
+
+		pthread_t computeMoveThread;
+		std::string naclMoveResult;
 };
 
 }

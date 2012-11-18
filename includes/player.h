@@ -20,7 +20,9 @@ private:
 
 public:
 	Player(AI *algoritihm, int color, std::string language);
-	~Player();
+	~Player(){
+		delete algorithm;
+	}
 
 	std::string lang(){
 		return language;	

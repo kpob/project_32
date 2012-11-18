@@ -66,7 +66,8 @@ void AI::nextMoves(GameState *gs, int from, std::vector<GameState*> &v) {
 				unsigned last = v.size()-1;
 				if(next->whites() != v.at(last)->whites() || next->blacks() != v.at(last)->blacks()){
 					v.push_back(next);
-				}
+				}else
+					delete next;
 			}else
 				v.push_back(next);
 		}
@@ -110,6 +111,8 @@ void AI::nextJumps(GameState *gs, int from, std::vector<GameState*> &v) {
 			unsigned last = v.size()-1;
 			if(next->whites() != v.at(last)->whites() || next->blacks() != v.at(last)->blacks())
 				v.push_back(next);
+			else
+				delete next;
 		}else{
 			v.push_back(next);
 		}

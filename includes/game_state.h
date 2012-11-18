@@ -22,30 +22,22 @@ private:
 public:
 
 	GameState(BITBOARD w, BITBOARD b, BITBOARD q);
+	~GameState();
 
 	GameState(BITBOARD w, BITBOARD b, BITBOARD q, int player);
 
-	BITBOARD whites(){
-		return (whitePawns);
-	}
+	BITBOARD whites();
 
-	BITBOARD blacks(){
-		return (blackPawns);
-	}
+	BITBOARD blacks();
 
-	BITBOARD queens(){
-		return (allQueens);
-	}
+	BITBOARD queens();
 
-	BITBOARD queens(int player){
-		if(player == black)
-			return (allQueens & blackPawns);
-		else
-			return (allQueens & whitePawns);
-	}
+	BITBOARD queens(int player);
 
-	int player() {
-		return (currentPlayer);
+	int player();
+
+	bool operator ==(const GameState& gs){
+		return whitePawns==gs.whitePawns && blackPawns==gs.blackPawns && allQueens==gs.allQueens;
 	}
 
 	void setState(BITBOARD w, BITBOARD b, BITBOARD q, int player);

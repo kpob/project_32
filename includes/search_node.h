@@ -16,7 +16,7 @@ private:
 
 public:
 	SearchNode(GameState *state, int value);
-	~SearchNode(){};
+	~SearchNode();
 	int getValue();
 	GameState* getState();
 

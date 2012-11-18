@@ -38,13 +38,22 @@
     <textarea id="logField" name="logField" rows="25" cols="45"></textarea>
     <div/>
     <table>
-    	<button id="fortyTwoButton" onclick="sendNewGameToNaCl()">New Game</button>
- 	<button id="printBoard" onclick="printBoard()">NaCl Print Board</button>
-    	<button id="reverseTextButton" onclick="clearLog()">Clear Log</button>
-	<button id="setPlayers" onclick="setPlayersToNaCl()">Set Players</button>
-	<button id="stop" onclick="stop = true;">Stop</button>
-	<button id="setAndStart" onclick="setPlayersToNaCl(); sendNewGameToNaCl();">SetPlayers and New Game</button>		
-
+    <!-- <button id="fortyTwoButton" onclick="sendNewGameToNaCl()">New Game</button> -->
+ 	<!-- <button id="printBoard" onclick="printBoard()">NaCl Print Board</button> -->
+    <button id="reverseTextButton" onclick="clearLog()">Clear Log</button>
+	<!-- <button id="setPlayers" onclick="setPlayersToNaCl()">Set Players</button> -->
+	<!-- <button id="stop" onclick="stop = true;">Stop</button> -->
+	<button id="setAndStart" onclick="setPlayersToNaCl(); sendNewGameToNaCl();">Start</button>		
+	<select name="search_lvl" id="search_lvl">
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option selected="selected">5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+	</select>
     <table/>
   </div>
 </body>
