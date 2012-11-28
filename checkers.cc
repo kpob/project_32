@@ -117,16 +117,16 @@ void CheckersInstance::makeMovesFromVector(const std::vector<std::string> movesV
 
 void CheckersInstance::makeNaclMove(){
 	srand(time(NULL));
-	time_t start, end;
-	time(&start); 
+	clock_t cl;
+	cl = clock();
 	pthread_create(&computeMoveThread, NULL, computeMove, this);
 	(void) pthread_join(computeMoveThread, NULL);
-	time(&end);
+	cl = clock() - cl;
 	
-	std::stringstream aa;
-	std::cout << "log: czas " << difftime(end, start);
-	aa << "czas " << difftime(end, start);
-	PostMessage(pp::Var(aa.str()));
+	std::stringstream log;
+	std::cout << "log: czas " << ((float) cl) / CLOCKS_PER_SEC;
+	log << "czas " << ((float) cl) / CLOCKS_PER_SEC;
+	PostMessage(pp::Var(log.str()));
 	
 	PostMessage(pp::Var(naclMoveResult));
 	

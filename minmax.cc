@@ -9,11 +9,10 @@
 #include "includes/game.h"
 #include "includes/search_node.h"
 #include "includes/helper.h"
-#include <time.h>
 #include <sstream>
 #include <iostream>
 MinMax::MinMax() :
-		AI(), depth(6), serchedStates(0) {
+		AI(), depth(4), serchedStates(0) {
 }
 
 MinMax::MinMax(int depth) : AI(), depth(depth){

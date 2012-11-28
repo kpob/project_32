@@ -10,6 +10,33 @@ GameState::GameState(BITBOARD w, BITBOARD b, BITBOARD q, int player) :
 	whitePawns(w), blackPawns(b), allQueens(q), currentPlayer(player){
 }
 
+GameState::~GameState(){
+}
+
+BITBOARD GameState::whites(){
+	return (whitePawns);
+}
+
+BITBOARD GameState::blacks(){
+	return (blackPawns);
+}
+
+BITBOARD GameState::queens(){
+	return (allQueens);
+}
+
+BITBOARD GameState::queens(int player){
+	if(player == black)
+		return (allQueens & blackPawns);
+	else
+		return (allQueens & whitePawns);
+}
+
+int GameState::player() {
+	return (currentPlayer);
+}
+
+
 void GameState::setState(BITBOARD w, BITBOARD b, BITBOARD q, int player) {
 	whitePawns = w;
 	blackPawns = b;
@@ -23,8 +50,6 @@ void GameState::tooglePlayer(){
 		currentPlayer = white;
 	}else if(currentPlayer == white){
 		currentPlayer = black;
-	}else{
-		std::cout << "CHUJ" << std::endl;
 	}
 }
 
